@@ -10,7 +10,7 @@ inherit
 
 	MEMORY_STRUCTURE
 
-	
+
 create
 
 	make,
@@ -18,7 +18,7 @@ create
 
 feature -- Measurement
 
-	structure_size: INTEGER 
+	structure_size: INTEGER
 		do
 			Result := sizeof_external
 		end
@@ -35,7 +35,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_tv_sec (item)
 		end
 
-	set_tv_sec (a_value: INTEGER) 
+	set_tv_sec (a_value: INTEGER)
 			-- Change the value of member `tv_sec` to `a_value`.
 		require
 			exists: exists
@@ -55,7 +55,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_tv_usec (item)
 		end
 
-	set_tv_usec (a_value: INTEGER) 
+	set_tv_usec (a_value: INTEGER)
 			-- Change the value of member `tv_usec` to `a_value`.
 		require
 			exists: exists
@@ -67,7 +67,7 @@ feature {ANY} -- Member Access
 
 feature {NONE} -- Implementation wrapper for struct struct timeval
 
-	sizeof_external: INTEGER 
+	sizeof_external: INTEGER
 		external
 			"C inline use <libusb.h>"
 		alias
@@ -85,14 +85,18 @@ feature {NONE} -- Implementation wrapper for struct struct timeval
 			]"
 		end
 
-	set_c_tv_sec (an_item: POINTER; a_value: INTEGER) 
+	set_c_tv_sec (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
 			"C inline use <libusb.h>"
 		alias
 			"[
-				((struct timeval*)$an_item)->tv_sec =  (__time_t)$a_value
+				#ifdef EIF_WINDOWS
+					((struct timeval*)$an_item)->tv_sec =  (long)$a_value
+				#else
+					((struct timeval*)$an_item)->tv_sec =  (__time_t)$a_value
+				#endif
 			]"
 		ensure
 			tv_sec_set: a_value = c_tv_sec (an_item)
@@ -109,14 +113,18 @@ feature {NONE} -- Implementation wrapper for struct struct timeval
 			]"
 		end
 
-	set_c_tv_usec (an_item: POINTER; a_value: INTEGER) 
+	set_c_tv_usec (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
 			"C inline use <libusb.h>"
 		alias
 			"[
-				((struct timeval*)$an_item)->tv_usec =  (__suseconds_t)$a_value
+				#ifdef EIF_WINDOWS
+					((struct timeval*)$an_item)->tv_usec =  (long)$a_value
+				#else
+					((struct timeval*)$an_item)->tv_usec =  (__suseconds_t)$a_value
+				#endif
 			]"
 		ensure
 			tv_usec_set: a_value = c_tv_usec (an_item)

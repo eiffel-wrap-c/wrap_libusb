@@ -15,7 +15,8 @@ inherit
 			libusb_init as libusb_init_api,
 			libusb_exit as libusb_exit_api,
 			libusb_get_device_list as libusb_get_device_list_api,
-			libusb_free_device_list as libusb_free_device_list_api
+			libusb_free_device_list as libusb_free_device_list_api,
+			libusb_open as libusb_open_api
 		end
 
 
@@ -61,7 +62,7 @@ feature -- Access
 		local
 			l_ctx: POINTER
 			l_ptr: POINTER
-			i: INTEGER
+			i : INTEGER
 		do
 			if attached ctx then
 				l_ctx := ctx.item
@@ -90,6 +91,22 @@ feature -- Access
 		end
 
 
+	libusb_open (dev: LIBUSB_DEVICE_STRUCT_API; dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER
+			-- Open a device and obtain a device handle. A handle allows you to perform I/O on the device in question.
+			-- Internally, this function adds a reference to the device and makes it available to you through libusb_get_device(). This reference is removed during libusb_close().
+			-- This is a non-blocking function; no requests are sent over the bus.
+			-- dev	the device to open
+			-- dev_handle	output location for the returned device handle pointer. Only populated when the return code is 0.
+		local
+			l_ptr: POINTER
+		do
+			Result := c_libusb_open (dev.item, $l_ptr)
+			if l_ptr /= default_pointer then
+				dev_handle.make_by_pointer (l_ptr)
+			end
+		end
+
+
 feature {NONE} -- Implementation
 
 
@@ -98,11 +115,13 @@ feature {NONE} -- Implementation
 			"C inline use <libusb.h>"
 		alias
 			"[
-				libusb_device *device; 
-				device = (libusb_device **)$a_pointer + $a_index;
-				
-				/*
-				struct libusb_device_descriptor desc;
+				libusb_device *device;
+				libusb_device **devs;
+				devs = $a_pointer;
+
+				device = devs [$a_index];
+
+				/*struct libusb_device_descriptor desc;
 				libusb_device_handle *handle = NULL;
 				char string[256];
 				int ret;
@@ -113,15 +132,19 @@ feature {NONE} -- Implementation
 					fprintf(stderr, "failed to get device descriptor");
 					return;
 				}
-
+				
 				printf("Dev (bus %u, device %u): %04X - %04X\n",
-				       libusb_get_bus_number(device), libusb_get_device_address(device),
-				       desc.idVendor, desc.idProduct);
+					       libusb_get_bus_number(device), libusb_get_device_address(device),
+					       desc.idVendor, desc.idProduct);
 				*/
+
+
+				//ret = libusb_open(device, &handle);
+				
+				//printf ("\nOpen return %d\n", ret);
 				return device;
 			]"
 		end
-
 
 
 end
