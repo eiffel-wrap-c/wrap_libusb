@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-21-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-21-0 http://www.eiffel.com/developers/xml/configuration-1-21-0.xsd" name="libusb" uuid="05E2754B-DF7C-4442-A275-8C4228006EBD" library_target="libusb">
+	<target name="libusb">
+		<root all_classes="true"/>
+		<option warning="warning" full_class_checking="false" is_attached_by_default="true" manifest_array_type="mismatch_warning">
+			<assertions precondition="true"/>
+		</option>
+		<setting name="console_application" value="true"/>
+		<setting name="inlining_size" value="0"/>
+		<setting name="msil_classes_per_module" value="5"/>
+		<setting name="dead_code_removal" value="feature"/>
+		<external_include location="$ECF_CONFIG_PATH\generated_wrapper\c\include">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_include>
+		<external_include location="$ECF_CONFIG_PATH\C\include\">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_include>
+		<external_include location="/usr/local/include/libusb-1.0">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_include>
+		<external_include location="$ECF_CONFIG_PATH/generated_wrapper/c/include">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_include>
+		<external_object location="$ECF_CONFIG_PATH/C/spec/$ISE_C_COMPILER/$ISE_PLATFORM/lib/eif_libusb.lib">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_object>
+		<external_object location="$ECF_CONFIG_PATH/C/spec/$(ISE_PLATFORM)/lib/eif_libusb.a">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_object>
+		<external_object location="/usr/local/lib/libusb-1.0.so ">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_object>
+		<external_linker_flag value="$ECF_CONFIG_PATH/C/lib/libusb-1.0.lib">
+			<condition>
+				<platform value="windows"/>
+			</condition>
+		</external_linker_flag>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<cluster name="src" location=".\" recursive="true">
+			<file_rule>
+				<exclude>/EIFGENs$</exclude>
+				<exclude>/c$</exclude>
+				<exclude>/include$</exclude>
+			</file_rule>
+		</cluster>
+	</target>
+</system>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<ewg_config name="libusb">
+
+  <rule_list>
+    
+    <!-- Ignore everything that starts with an underscore. -->
+    <rule>
+      <match>
+          <identifier name="_.*"/>  
+      </match>
+       <wrapper type="none">
+      </wrapper>
+    </rule>
+
+    <!-- Include  libusb_-->
+    <rule>
+       <match>
+           <identifier name="libusb_.*"/>
+       </match>
+       <wrapper type="default">
+      </wrapper>
+    </rule>
+
+    <!-- And the rest should be ignored -->
+    <rule>
+      <match>
+      </match>
+       <wrapper type="none">
+      </wrapper>
+    </rule>
+  </rule_list>
+</ewg_config>
