@@ -33,6 +33,7 @@ feature {NONE} -- Initialization
 			ret: INTEGER
 			list: LIBUSB_DEVICE_LIST
 			i: INTEGER
+			desc: LIBUSB_DEVICE_DESCRIPTOR_STRUCT_API
 		do
 			ret := LUSB.libusb_init (Void)
 			check success: ret = 0 end
@@ -49,7 +50,12 @@ feature {NONE} -- Initialization
 				until
 					i > list.count
 				loop
-
+					create desc.make
+					ret :=  LUSB.libusb_get_device_descriptor (list.at (i), desc)
+					if ret < 0 then
+						print ("%N Failed to get device descriptor")
+					end
+					i :=  i + 1
 				end
 				LUSB.libusb_free_device_list (list, True)
 			end
