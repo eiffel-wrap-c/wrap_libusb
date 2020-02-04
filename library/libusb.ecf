@@ -6,15 +6,13 @@
 			<assertions precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
-		<setting name="inlining_size" value="0"/>
-		<setting name="msil_classes_per_module" value="5"/>
 		<setting name="dead_code_removal" value="feature"/>
 		<external_include location="$ECF_CONFIG_PATH\generated_wrapper\c\include">
 			<condition>
 				<platform value="windows"/>
 			</condition>
 		</external_include>
-		<external_include location="$ECF_CONFIG_PATH\C\include\">
+		<external_include location="$ECF_CONFIG_PATH\C\include">
 			<condition>
 				<platform value="windows"/>
 			</condition>
@@ -39,7 +37,7 @@
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_object>
-		<external_object location="/usr/local/lib/libusb-1.0.so ">
+		<external_object location="/usr/local/lib/libusb-1.0.so">
 			<condition>
 				<platform excluded_value="windows"/>
 			</condition>
