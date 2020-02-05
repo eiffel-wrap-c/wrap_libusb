@@ -1,6 +1,7 @@
 #!/bin/sh
 # Post processing script
 #Delete some generated classes
+cp ewg_libusb_callback_c_glue_code.c  ./generated_wrapper/c/src
 
 cd generated_wrapper/eiffel/
 rm libusb_version_struct_api.e
