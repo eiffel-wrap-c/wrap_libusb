@@ -18,7 +18,8 @@ inherit
 			libusb_free_device_list as libusb_free_device_list_api,
 			libusb_open as libusb_open_api,
 			libusb_error_name as libusb_error_name_api,
-			libusb_get_config_descriptor as libusb_get_config_descriptor_api
+			libusb_get_config_descriptor as libusb_get_config_descriptor_api,
+			libusb_get_string_descriptor_ascii as libusb_get_string_descriptor_ascii_api
 		end
 
 
@@ -128,6 +129,13 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				config.make_by_pointer (l_ptr)
 			end
+		end
+
+	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER
+		do
+
+			Result := c_libusb_get_string_descriptor_ascii (dev_handle.item, desc_index, data.area.base_address, length)
+			data.from_c (data.area.base_address)
 		end
 
 feature {NONE} -- Implementation

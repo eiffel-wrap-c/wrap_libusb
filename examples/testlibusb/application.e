@@ -78,19 +78,19 @@ feature {NONE} -- Initialization
 					if desc.imanufacturer /= 0 then
 						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.imanufacturer, data, length)
 						if ret > 0 then
-							print ("%NManufacturer: " + data + "%N")
+							print ("%N      Manufacturer: " + data )
 						end
 					end
 					if desc.iproduct /= 0 then
 						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.iproduct, data, length)
 						if ret > 0 then
-							print ("%NProduct: " + data + "%N")
+							print ("%N      Product: " + data )
 						end
 					end
 					if desc.iserialnumber /= 0 then
 						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.iserialnumber, data, length)
 						if ret > 0 then
-							print ("%NSerial Number: " + data + "%N")
+							print ("%N      Serial Number: " + data + "%N")
 						end
 					end
 				else
@@ -113,6 +113,9 @@ feature {NONE} -- Initialization
 					LUSB.libusb_free_config_descriptor (config)
 				end
 				i := i + 1
+			end
+			if attached handle then
+				LUSB.libusb_close (handle)
 			end
 
 		end
