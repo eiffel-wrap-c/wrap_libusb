@@ -212,6 +212,7 @@ feature {ANY} -- Member Access
 		local
 			mp: MANAGED_POINTER
 			i: INTEGER
+			l_ptr: POINTER
 		do
 			create {ARRAYED_LIST [LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API] } Result.make (bnumendpoints)
 			create mp.make_from_pointer (c_endpoint (item), bnumendpoints * {LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.structure_size)
@@ -221,13 +222,28 @@ feature {ANY} -- Member Access
 			until
 				i = bnumendpoints
 			loop
-				Result.force (create {LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.make_by_pointer (mp.read_pointer (i*{LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.structure_size)) )
+				l_ptr := mp.read_pointer (i*{LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.structure_size)
+				if l_ptr /= default_pointer then
+					Result.force (create {LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.make_by_pointer (l_ptr))
+				end
 				i := i + 1
 			end
 		ensure
 			result_count: Result.count = bnumendpoints
 		end
 
+	endpoint_at (i: INTEGER): LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API
+		require
+			valid_index: i>=0 and i < bnumendpoints
+		local
+			l_ptr: POINTER
+		do
+			create Result.make
+			l_ptr := c_endpoint_at (item, i)
+			if l_ptr /= default_pointer then
+				create Result.make_by_pointer (l_ptr)
+			end
+		end
 
 	set_endpoint (a_value: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API)
 			-- Set member `endpoint`
@@ -514,6 +530,19 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 		alias
 			"[
 				&(((struct libusb_interface_descriptor*)$an_item)->endpoint)
+			]"
+		end
+
+	c_endpoint_at (an_item: POINTER; i: INTEGER): POINTER
+		require
+			an_item_not_null: an_item /= default_pointer
+		external
+			"C inline use <libusb.h>"
+		alias
+			"[
+				struct  libusb_endpoint_descriptor* lendpoint;
+				lendpoint = ((struct libusb_interface_descriptor*)$an_item)->endpoint;
+				return &lendpoint [$i];
 			]"
 		end
 

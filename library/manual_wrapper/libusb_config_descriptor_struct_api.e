@@ -192,6 +192,7 @@ feature {ANY} -- Member Access
 		local
 			mp: MANAGED_POINTER
 			i: INTEGER
+			l_ptr: POINTER
 		do
 			create {ARRAYED_LIST [LIBUSB_INTERFACE_STRUCT_API] } Result.make (bnuminterfaces)
 			create mp.make_from_pointer (c_interface (item), bnuminterfaces * {LIBUSB_INTERFACE_STRUCT_API}.structure_size)
@@ -201,7 +202,10 @@ feature {ANY} -- Member Access
 			until
 				i = bnuminterfaces
 			loop
-				Result.force (create {LIBUSB_INTERFACE_STRUCT_API}.make_by_pointer (mp.read_pointer (i*{LIBUSB_INTERFACE_STRUCT_API}.structure_size)) )
+				l_ptr := mp.read_pointer (i*{LIBUSB_INTERFACE_STRUCT_API}.structure_size)
+				if l_ptr /= default_pointer then
+					Result.force (create {LIBUSB_INTERFACE_STRUCT_API}.make_by_pointer (l_ptr))
+				end
 				i := i + 1
 			end
 		ensure

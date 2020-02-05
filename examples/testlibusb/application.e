@@ -112,11 +112,14 @@ feature {NONE} -- Initialization
 					print_configuration (config)
 					LUSB.libusb_free_config_descriptor (config)
 				end
+				i := i + 1
 			end
 
 		end
 
 	print_configuration (a_config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API)
+		local
+			i: INTEGER
 		do
 			print("  Configuration:%N");
 			print("    wTotalLength:            "+ a_config.wtotallength.out + "%N")
@@ -126,18 +129,28 @@ feature {NONE} -- Initialization
 			print("    bmAttributes:            "+ a_config.bmattributes.to_hex_string + "h%N")
 			print("    MaxPower:                "+ a_config.maxpower.out + "%N")
 
-			across a_config.interface as ic loop print_interface (ic.item)  end
+			from i := 0 until i = a_config.bnuminterfaces
+			loop
+				print_interface (a_config.interface_at (i))
+				i := i + 1
+			end
 		end
 
 	print_interface (a_interface: LIBUSB_INTERFACE_STRUCT_API )
+		local
+			i: INTEGER
 		do
-			across a_interface.altsetting as ic loop
-				print_alternative_settings (ic.item)
+			from i := 0 until i = a_interface.num_altsetting
+			loop
+				print_alternative_settings (a_interface.altsetting_at (i))
+				i := i + 1
 			end
 		end
 
 
 	print_alternative_settings ( a_settings: LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API)
+		local
+			i: INTEGER
 		do
 			print("    Interface:%N");
 			print("      bInterfaceNumber:      " + a_settings.binterfacenumber.out + "%N")
@@ -148,9 +161,10 @@ feature {NONE} -- Initialization
 			print("      bInterfaceProtocol:    " + a_settings.binterfaceprotocol.out + "%N")
 			print("      iInterface:            " + a_settings.iinterface.out + "%N")
 
-
-			across a_settings.endpoint as ic loop
-				print_endpoint (ic.item)
+			from i:= 0 until i =a_settings.bnumendpoints
+			loop
+				print_endpoint (a_settings.endpoint_at (i))
+				i := i + 1
 			end
 		end
 

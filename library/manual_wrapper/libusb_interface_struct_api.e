@@ -32,6 +32,7 @@ feature {ANY} -- Member Access
 		local
 			mp: MANAGED_POINTER
 			i: INTEGER
+			l_ptr: POINTER
 		do
 			create {ARRAYED_LIST [LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API] } Result.make (num_altsetting)
 			create mp.make_from_pointer (c_altsetting (item), num_altsetting * {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
@@ -41,12 +42,29 @@ feature {ANY} -- Member Access
 			until
 				i = num_altsetting
 			loop
-				Result.force (create {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.make_by_pointer (mp.read_pointer (i*{LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)) )
+				l_ptr := mp.read_pointer (i*{LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
+				if l_ptr /= default_pointer then
+					Result.force (create {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.make_by_pointer (l_ptr) )
+				end
 				i := i + 1
 			end
 		ensure
 			result_count: Result.count = num_altsetting
 		end
+
+	altsetting_at (i: INTEGER): LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API
+		require
+			valid_index: i>=0 and i < num_altsetting
+		local
+			l_ptr: POINTER
+		do
+			create Result.make
+			l_ptr := c_altsetting_at (item, i)
+			if l_ptr /= default_pointer then
+				create Result.make_by_pointer (l_ptr)
+			end
+		end
+
 
 
 	set_altsetting (a_value: LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API)
@@ -97,6 +115,19 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface
 		alias
 			"[
 				&(((struct libusb_interface*)$an_item)->altsetting)
+			]"
+		end
+
+	c_altsetting_at (an_item: POINTER; i: INTEGER): POINTER
+		require
+			an_item_not_null: an_item /= default_pointer
+		external
+			"C inline use <libusb.h>"
+		alias
+			"[
+				struct  libusb_interface_descriptor* laltsetting;
+				laltsetting = ((struct libusb_interface*)$an_item)->altsetting;
+				return &laltsetting [$i];
 			]"
 		end
 
