@@ -16,7 +16,9 @@ inherit
 			libusb_exit as libusb_exit_api,
 			libusb_get_device_list as libusb_get_device_list_api,
 			libusb_free_device_list as libusb_free_device_list_api,
-			libusb_open as libusb_open_api
+			libusb_open as libusb_open_api,
+			libusb_error_name as libusb_error_name_api,
+			libusb_get_config_descriptor as libusb_get_config_descriptor_api
 		end
 
 
@@ -106,6 +108,27 @@ feature -- Access
 			end
 		end
 
+	libusb_error_name (errcode: INTEGER): STRING
+			-- Returns a constant NULL-terminated string with the ASCII name of a libusb error or transfer status code.
+		local
+			l_ptr: POINTER
+		do
+			Result := "UNKNOWN"
+			l_ptr := libusb_error_name_api (errcode)
+			if l_ptr /= Void then
+				Result := (create {C_STRING}.make_by_pointer (l_ptr)).string
+			end
+		end
+
+	libusb_get_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config_index: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
+		local
+			l_ptr: POINTER
+		do
+			Result := c_libusb_get_config_descriptor (dev.item, config_index, $l_ptr)
+			if l_ptr /= default_pointer then
+				config.make_by_pointer (l_ptr)
+			end
+		end
 
 feature {NONE} -- Implementation
 

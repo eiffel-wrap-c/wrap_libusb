@@ -10,7 +10,7 @@ inherit
 
 	MEMORY_STRUCTURE
 
-	
+
 create
 
 	make,
@@ -18,27 +18,38 @@ create
 
 feature -- Measurement
 
-	structure_size: INTEGER 
+	structure_size: INTEGER
 		do
 			Result := sizeof_external
 		end
 
 feature {ANY} -- Member Access
 
-	altsetting: detachable LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API 
+	altsetting: LIST [LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API]
 			-- Access member `altsetting`
 		require
 			exists: exists
+		local
+			mp: MANAGED_POINTER
+			i: INTEGER
 		do
-			if attached c_altsetting (item) as l_ptr and then not l_ptr.is_default_pointer then
-				create Result.make_by_pointer (l_ptr)
+			create {ARRAYED_LIST [LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API] } Result.make (num_altsetting)
+			create mp.make_from_pointer (c_altsetting (item), num_altsetting * {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
+
+			from
+				i := 0
+			until
+				i = num_altsetting
+			loop
+				Result.force (create {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.make_by_pointer (mp.read_pointer (i*{LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)) )
+				i := i + 1
 			end
 		ensure
-			result_void: Result = Void implies c_altsetting (item) = default_pointer 
-			result_not_void: attached Result as l_result implies l_result.item = c_altsetting (item) 
+			result_count: Result.count = num_altsetting
 		end
 
-	set_altsetting (a_value: LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API) 
+
+	set_altsetting (a_value: LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API)
 			-- Set member `altsetting`
 		require
 			a_value_not_void: a_value /= Void
@@ -59,7 +70,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_num_altsetting (item)
 		end
 
-	set_num_altsetting (a_value: INTEGER) 
+	set_num_altsetting (a_value: INTEGER)
 			-- Change the value of member `num_altsetting` to `a_value`.
 		require
 			exists: exists
@@ -71,7 +82,7 @@ feature {ANY} -- Member Access
 
 feature {NONE} -- Implementation wrapper for struct struct libusb_interface
 
-	sizeof_external: INTEGER 
+	sizeof_external: INTEGER
 		external
 			"C inline use <libusb.h>"
 		alias
@@ -85,11 +96,11 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface
 			"C inline use <libusb.h>"
 		alias
 			"[
-				((struct libusb_interface*)$an_item)->altsetting
+				&(((struct libusb_interface*)$an_item)->altsetting)
 			]"
 		end
 
-	set_c_altsetting (an_item: POINTER; a_value: POINTER) 
+	set_c_altsetting (an_item: POINTER; a_value: POINTER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -113,7 +124,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface
 			]"
 		end
 
-	set_c_num_altsetting (an_item: POINTER; a_value: INTEGER) 
+	set_c_num_altsetting (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external

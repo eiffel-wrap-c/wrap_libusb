@@ -5,6 +5,9 @@
 cd generated_wrapper/eiffel/
 rm libusb_version_struct_api.e
 rm timeval_struct_api.e
+rm libusb_config_descriptor_struct_api
+rm libusb_interface_descriptor_struct_api
+rm libusb_interface_struct_api
 
 cd ..
 cd ..

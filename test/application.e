@@ -51,7 +51,7 @@ feature {NONE} -- Initialization
 				from
 					i := 1
 				until
-					i = list.count
+					i > list.count
 				loop
 					create desc.make
 					ret :=  LUSB.libusb_get_device_descriptor (list.at (i), desc)
@@ -60,7 +60,7 @@ feature {NONE} -- Initialization
 					end
 					print ("%N Dev (bus " +  LUSB.libusb_get_bus_number (list.at (i)).out + ", device " + LUSB.libusb_get_device_address (list.at (i)).out + " ): " +
 					desc.idvendor.to_hex_string +  " " + desc.idproduct.to_hex_string)
-	   				i :=  i + 1
+
 
 					create handle.make
 	   				ret := LUSB.libusb_open (list.at (i), handle)
@@ -82,7 +82,7 @@ feature {NONE} -- Initialization
 
 
 	   				end
-
+					i :=  i + 1
 				end
 				LUSB.libusb_free_device_list (list, True)
 			end

@@ -10,7 +10,7 @@ inherit
 
 	MEMORY_STRUCTURE
 
-	
+
 create
 
 	make,
@@ -18,7 +18,7 @@ create
 
 feature -- Measurement
 
-	structure_size: INTEGER 
+	structure_size: INTEGER
 		do
 			Result := sizeof_external
 		end
@@ -35,7 +35,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_blength (item)
 		end
 
-	set_blength (a_value: INTEGER) 
+	set_blength (a_value: INTEGER)
 			-- Change the value of member `bLength` to `a_value`.
 		require
 			exists: exists
@@ -55,7 +55,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_bdescriptortype (item)
 		end
 
-	set_bdescriptortype (a_value: INTEGER) 
+	set_bdescriptortype (a_value: INTEGER)
 			-- Change the value of member `bDescriptorType` to `a_value`.
 		require
 			exists: exists
@@ -75,7 +75,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_binterfacenumber (item)
 		end
 
-	set_binterfacenumber (a_value: INTEGER) 
+	set_binterfacenumber (a_value: INTEGER)
 			-- Change the value of member `bInterfaceNumber` to `a_value`.
 		require
 			exists: exists
@@ -95,7 +95,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_balternatesetting (item)
 		end
 
-	set_balternatesetting (a_value: INTEGER) 
+	set_balternatesetting (a_value: INTEGER)
 			-- Change the value of member `bAlternateSetting` to `a_value`.
 		require
 			exists: exists
@@ -115,7 +115,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_bnumendpoints (item)
 		end
 
-	set_bnumendpoints (a_value: INTEGER) 
+	set_bnumendpoints (a_value: INTEGER)
 			-- Change the value of member `bNumEndpoints` to `a_value`.
 		require
 			exists: exists
@@ -135,7 +135,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_binterfaceclass (item)
 		end
 
-	set_binterfaceclass (a_value: INTEGER) 
+	set_binterfaceclass (a_value: INTEGER)
 			-- Change the value of member `bInterfaceClass` to `a_value`.
 		require
 			exists: exists
@@ -155,7 +155,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_binterfacesubclass (item)
 		end
 
-	set_binterfacesubclass (a_value: INTEGER) 
+	set_binterfacesubclass (a_value: INTEGER)
 			-- Change the value of member `bInterfaceSubClass` to `a_value`.
 		require
 			exists: exists
@@ -175,7 +175,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_binterfaceprotocol (item)
 		end
 
-	set_binterfaceprotocol (a_value: INTEGER) 
+	set_binterfaceprotocol (a_value: INTEGER)
 			-- Change the value of member `bInterfaceProtocol` to `a_value`.
 		require
 			exists: exists
@@ -195,7 +195,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_iinterface (item)
 		end
 
-	set_iinterface (a_value: INTEGER) 
+	set_iinterface (a_value: INTEGER)
 			-- Change the value of member `iInterface` to `a_value`.
 		require
 			exists: exists
@@ -205,20 +205,31 @@ feature {ANY} -- Member Access
 			iinterface_set: a_value = iinterface
 		end
 
-	endpoint: detachable LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API 
+	endpoint: LIST [LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API]
 			-- Access member `endpoint`
 		require
 			exists: exists
+		local
+			mp: MANAGED_POINTER
+			i: INTEGER
 		do
-			if attached c_endpoint (item) as l_ptr and then not l_ptr.is_default_pointer then
-				create Result.make_by_pointer (l_ptr)
+			create {ARRAYED_LIST [LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API] } Result.make (bnumendpoints)
+			create mp.make_from_pointer (c_endpoint (item), bnumendpoints * {LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.structure_size)
+
+			from
+				i := 0
+			until
+				i = bnumendpoints
+			loop
+				Result.force (create {LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.make_by_pointer (mp.read_pointer (i*{LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API}.structure_size)) )
+				i := i + 1
 			end
 		ensure
-			result_void: Result = Void implies c_endpoint (item) = default_pointer 
-			result_not_void: attached Result as l_result implies l_result.item = c_endpoint (item) 
+			result_count: Result.count = bnumendpoints
 		end
 
-	set_endpoint (a_value: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API) 
+
+	set_endpoint (a_value: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API)
 			-- Set member `endpoint`
 		require
 			a_value_not_void: a_value /= Void
@@ -242,7 +253,7 @@ feature {ANY} -- Member Access
 			result_not_void: attached Result as l_result implies l_result.same_string ((create {C_STRING}.make_by_pointer (item)).string)
 		end
 
-	set_extra (a_value: STRING) 
+	set_extra (a_value: STRING)
 			-- Change the value of member `extra` to `a_value`.
 		require
 			exists: exists
@@ -260,7 +271,7 @@ feature {ANY} -- Member Access
 			result_correct: Result = c_extra_length (item)
 		end
 
-	set_extra_length (a_value: INTEGER) 
+	set_extra_length (a_value: INTEGER)
 			-- Change the value of member `extra_length` to `a_value`.
 		require
 			exists: exists
@@ -272,7 +283,7 @@ feature {ANY} -- Member Access
 
 feature {NONE} -- Implementation wrapper for struct struct libusb_interface_descriptor
 
-	sizeof_external: INTEGER 
+	sizeof_external: INTEGER
 		external
 			"C inline use <libusb.h>"
 		alias
@@ -290,7 +301,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_blength (an_item: POINTER; a_value: INTEGER) 
+	set_c_blength (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -314,7 +325,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_bdescriptortype (an_item: POINTER; a_value: INTEGER) 
+	set_c_bdescriptortype (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -338,7 +349,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_binterfacenumber (an_item: POINTER; a_value: INTEGER) 
+	set_c_binterfacenumber (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -362,7 +373,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_balternatesetting (an_item: POINTER; a_value: INTEGER) 
+	set_c_balternatesetting (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -386,7 +397,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_bnumendpoints (an_item: POINTER; a_value: INTEGER) 
+	set_c_bnumendpoints (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -410,7 +421,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_binterfaceclass (an_item: POINTER; a_value: INTEGER) 
+	set_c_binterfaceclass (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -434,7 +445,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_binterfacesubclass (an_item: POINTER; a_value: INTEGER) 
+	set_c_binterfacesubclass (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -458,7 +469,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_binterfaceprotocol (an_item: POINTER; a_value: INTEGER) 
+	set_c_binterfaceprotocol (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -482,7 +493,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_iinterface (an_item: POINTER; a_value: INTEGER) 
+	set_c_iinterface (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -502,11 +513,11 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			"C inline use <libusb.h>"
 		alias
 			"[
-				((struct libusb_interface_descriptor*)$an_item)->endpoint
+				&(((struct libusb_interface_descriptor*)$an_item)->endpoint)
 			]"
 		end
 
-	set_c_endpoint (an_item: POINTER; a_value: POINTER) 
+	set_c_endpoint (an_item: POINTER; a_value: POINTER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -530,7 +541,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_extra (an_item: POINTER; a_value: POINTER) 
+	set_c_extra (an_item: POINTER; a_value: POINTER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external
@@ -554,7 +565,7 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_interface_desc
 			]"
 		end
 
-	set_c_extra_length (an_item: POINTER; a_value: INTEGER) 
+	set_c_extra_length (an_item: POINTER; a_value: INTEGER)
 		require
 			an_item_not_null: an_item /= default_pointer
 		external

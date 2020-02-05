@@ -15,5 +15,5 @@ Work in progress
 
 ## Examples
 
-* [test usb](examples/test_usb)
+* [testlibusb](examples/testlibusb)  `Test suite program based of C's libusb-0.1-compat testlibusb example.`
 
