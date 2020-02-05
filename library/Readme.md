@@ -11,7 +11,8 @@ Automated scripts will run wrapc with pre and post processing scripts and compil
 needed for the library.
 
 ### Windows
-```generator.bat
+```
+generator.bat
 ```
 ### Linux
 ```
