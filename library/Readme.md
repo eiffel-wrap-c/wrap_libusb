@@ -6,6 +6,18 @@ You need to have a binary version of WrapC tool and be able to execute it form t
 Before to regenerate the generated code, remove the folder `generated_wrapper`. If you are using geant, just run `geant clean` in other 
 case remove it manually.
 
+## Using Automated scripts
+Automated scripts will run wrapc with pre and post processing scripts and compiling the C glue code
+needed for the library.
+
+### Windows
+```generator.bat
+```
+### Linux
+```
+./generator.sh
+```
+
 ## Using WrapC with geant
 $LIB_PATH is the path to the library folder where you checkout the wrap_libusb library.
 
@@ -39,5 +51,7 @@ At the moment the tool require --output-dir and --full-header to be full paths.
   cd generated_wrapper\c\src
   finish_freezing -library
 ```
+
+
 
   
