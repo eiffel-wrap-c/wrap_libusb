@@ -112,6 +112,9 @@ feature {NONE} -- Initialization
 					print_configuration (config)
 					LUSB.libusb_free_config_descriptor (config)
 				end
+				if attached handle and then desc.bcdusb >= 0x0201 then
+					print_bos(handle)
+				end
 				i := i + 1
 			end
 			if attached handle then
@@ -150,7 +153,6 @@ feature {NONE} -- Initialization
 			end
 		end
 
-
 	print_alternative_settings ( a_settings: LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API)
 		local
 			i: INTEGER
@@ -171,8 +173,11 @@ feature {NONE} -- Initialization
 			end
 		end
 
-
 	print_endpoint (a_endpoint: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API)
+		local
+			i: INTEGER
+			ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API
+			ret: INTEGER
 		do
 			print("      Endpoint:%N");
 			print("        bEndpointAddress:    "+ a_endpoint.bendpointaddress.to_hex_string + "%N")
@@ -181,6 +186,101 @@ feature {NONE} -- Initialization
 			print("        bInterval:           "+ a_endpoint.binterval.out + "%N")
 			print("        bRefresh:            "+ a_endpoint.brefresh.out + "%N")
 			print("        bSynchAddress:       "+ a_endpoint.bsynchaddress.out + "%N");
+
+			from i := 0 until i = a_endpoint.extra_length loop
+				if attached a_endpoint.extra as l_extra then
+					if l_extra [i + 2].code = {LIBUSB_DESCRIPTOR_TYPE_ENUM_API}.LIBUSB_DT_SS_ENDPOINT_COMPANION then
+						create ep_comp.make
+						ret := LUSB.libusb_get_ss_endpoint_companion_descriptor(Void, a_endpoint, ep_comp)
+
+						if ret = {LIBUSB_ERROR_ENUM_API}.libusb_success then
+							print_endpoint_comp (ep_comp)
+							LUSB.libusb_free_ss_endpoint_companion_descriptor (ep_comp)
+						end
+					end
+					i := i + l_extra [i].code
+				else
+					i := i + 1
+				end
+			end
+		end
+
+	print_endpoint_comp (ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API)
+		do
+			print("      USB 3.0 Endpoint Companion:%N");
+			print("        bMaxBurst:           " + ep_comp.bMaxBurst.out + "%N")
+			print("        bmAttributes:        " + ep_comp.bmAttributes.to_hex_string + "%N")
+			print("        wBytesPerInterval:   " + ep_comp.wBytesPerInterval.out + "%N")
+
+		end
+
+	print_bos (a_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API)
+		local
+			l_bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API
+			ret: INTEGER
+			i: INTEGER
+			l_dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API
+			l_usb_2_0_ext: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API
+			l_exception: EXCEPTION
+			l_ss_dev_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API
+		do
+			create l_bos.make
+			ret := LUSB.libusb_get_bos_descriptor (a_handle, l_bos)
+			if ret < 0 then
+				-- do nothing
+			else
+				print("  Binary Object Store (BOS):%N");
+				print("    wTotalLength:            " + l_bos.wtotallength.out + "%N");
+				print("    bNumDeviceCaps:          " + l_bos.bnumdevicecaps.out + "%N")
+				from i:=0 until i = l_bos.bnumdevicecaps
+				loop
+					l_dev_cap := l_bos.dev_capability_at (i)
+					if l_dev_cap.bdevcapabilitytype = {LIBUSB_BOS_TYPE_ENUM_API}.LIBUSB_BT_USB_2_0_EXTENSION then
+						create l_usb_2_0_ext.make
+						ret := LUSB.libusb_get_usb_2_0_extension_descriptor(Void, l_dev_cap,  l_usb_2_0_ext)
+						if ret < 0 then
+							print ("%N" + LUSB.libusb_error_name (ret))
+							create l_exception
+							l_exception.set_description (generator + "print_bos failed at libusb_get_usb_2_0_extension_descriptor")
+							l_exception.raise
+						else
+							print_2_0_ext_cap (l_usb_2_0_ext)
+							LUSB.libusb_free_usb_2_0_extension_descriptor (l_usb_2_0_ext)
+						end
+					elseif l_dev_cap.bdevcapabilitytype = {LIBUSB_BOS_TYPE_ENUM_API}.LIBUSB_BT_SS_USB_DEVICE_CAPABILITY then
+						create l_ss_dev_cap.make
+						ret := LUSB.libusb_get_ss_usb_device_capability_descriptor(Void, l_dev_cap, l_ss_dev_cap)
+						if ret < 0 then
+							print ("%N" + LUSB.libusb_error_name (ret))
+							create l_exception
+							l_exception.set_description (generator + "print_bos failed at libusb_get_ss_usb_device_capability_descriptor")
+							l_exception.raise
+						else
+							print_ss_usb_cap (l_ss_dev_cap)
+							LUSB.libusb_free_ss_usb_device_capability_descriptor (l_ss_dev_cap)
+						end
+					end
+					i := i +  1
+				end
+			end
+		end
+
+	print_2_0_ext_cap (a_usb_2_0_ext_cap: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API)
+		do
+			print("    USB 2.0 Extension Capabilities:%N");
+			print("      bDevCapabilityType:    " + a_usb_2_0_ext_cap.bdevcapabilitytype.out + "%N")
+			print("      bmAttributes:          " + a_usb_2_0_ext_cap.bmattributes.to_hex_string + "%N")
+		end
+
+	print_ss_usb_cap( a_ss_usb_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API)
+		do
+			print("    USB 3.0 Capabilities:%N")
+			print("      bDevCapabilityType:    " + a_ss_usb_cap.bdevcapabilitytype.out + "%N")
+			print("      bmAttributes:          " + a_ss_usb_cap.bmattributes.out + "%N")
+			print("      wSpeedSupported:       " + a_ss_usb_cap.wspeedsupported.out + "%N");
+			print("      bFunctionalitySupport: " + a_ss_usb_cap.bfunctionalitysupport.out + "%N")
+			print("      bU1devExitLat:         " + a_ss_usb_cap.bu1devexitlat.out + "%N")
+			print("      bU2devExitLat:         " + a_ss_usb_cap.bu2devexitlat.out + "%N")
 		end
 
 feature {NONE} -- Implementation

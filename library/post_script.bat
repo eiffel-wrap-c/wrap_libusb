@@ -8,6 +8,7 @@ del /f timeval_struct_api.e
 del /f libusb_config_descriptor_struct_api.e
 del /f libusb_interface_descriptor_struct_api.e
 del /f libusb_interface_struct_api.e
+del /f libusb_bos_descriptor_struct_api.e
 
 cd ..
 cd ..

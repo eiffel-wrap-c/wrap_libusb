@@ -30,24 +30,32 @@ feature {ANY} -- Member Access
 		require
 			exists: exists
 		local
-			mp: MANAGED_POINTER
+			-- mp: MANAGED_POINTER
 			i: INTEGER
-			l_ptr: POINTER
+			-- l_ptr: POINTER
 		do
 			create {ARRAYED_LIST [LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API] } Result.make (num_altsetting)
-			create mp.make_from_pointer (c_altsetting (item), num_altsetting * {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
-
 			from
 				i := 0
 			until
 				i = num_altsetting
 			loop
-				l_ptr := mp.read_pointer (i*{LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
-				if l_ptr /= default_pointer then
-					Result.force (create {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.make_by_pointer (l_ptr) )
-				end
+				Result.force (altsetting_at (i))
 				i := i + 1
 			end
+
+--			create mp.make_from_pointer (c_altsetting (item), num_altsetting * {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
+--			from
+--				i := 0
+--			until
+--				i = num_altsetting
+--			loop
+--				l_ptr := mp.read_pointer (i*{LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.structure_size)
+--				if l_ptr /= default_pointer then
+--					Result.force (create {LIBUSB_INTERFACE_DESCRIPTOR_STRUCT_API}.make_by_pointer (l_ptr) )
+--				end
+--				i := i + 1
+--			end
 		ensure
 			result_count: Result.count = num_altsetting
 		end

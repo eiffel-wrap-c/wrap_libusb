@@ -9,7 +9,7 @@ rm timeval_struct_api.e
 rm libusb_config_descriptor_struct_api.e
 rm libusb_interface_descriptor_struct_api.e
 rm libusb_interface_struct_api.e
-
+rm libusb_bos_descriptor_struct_api.e
 cd ..
 cd ..
 

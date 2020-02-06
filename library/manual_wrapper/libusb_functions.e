@@ -19,7 +19,11 @@ inherit
 			libusb_open as libusb_open_api,
 			libusb_error_name as libusb_error_name_api,
 			libusb_get_config_descriptor as libusb_get_config_descriptor_api,
-			libusb_get_string_descriptor_ascii as libusb_get_string_descriptor_ascii_api
+			libusb_get_string_descriptor_ascii as libusb_get_string_descriptor_ascii_api,
+			libusb_get_ss_endpoint_companion_descriptor as libusb_get_ss_endpoint_companion_descriptor_api,
+			libusb_get_bos_descriptor as libusb_get_bos_descriptor_api,
+			libusb_get_usb_2_0_extension_descriptor as libusb_get_usb_2_0_extension_descriptor_api,
+			libusb_get_ss_usb_device_capability_descriptor as libusb_get_ss_usb_device_capability_descriptor_api
 		end
 
 
@@ -40,7 +44,6 @@ feature -- Access
 			end
 		end
 
-
 	libusb_exit (ctx: detachable LIBUSB_CONTEXT_STRUCT_API)
 			-- Deinitialize libusb. Should be called after closing all open devices and before your application terminates.
 			-- ctx: The context to deinitialize, or NULL for the default context.
@@ -52,7 +55,6 @@ feature -- Access
 			end
 			c_libusb_exit (l_ptr)
 		end
-
 
 	libusb_get_device_list (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; list: LIBUSB_DEVICE_LIST): INTEGER
 			-- Returns a list of USB devices currently attached to the system. This is your entry point into finding a USB device to operate.
@@ -82,7 +84,6 @@ feature -- Access
 			end
 
 		end
-
 
 	libusb_free_device_list (list: LIBUSB_DEVICE_LIST; a_ref: BOOLEAN)
 			-- Frees a list of devices previously discovered using libusb_get_device_list().
@@ -122,6 +123,11 @@ feature -- Access
 		end
 
 	libusb_get_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config_index: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
+			-- Get a USB configuration descriptor based on its index. This is a non-blocking function which does not involve any requests being sent to the device.
+			-- dev	a device
+			-- config_index	the index of the configuration you wish to retrieve
+			-- config	output location for the USB configuration descriptor. Only valid if 0 was returned. Must be freed with libusb_free_config_descriptor() after use.
+			-- Result   0 on success LIBUSB_ERROR_NOT_FOUND if the configuration does not exist, another LIBUSB_ERROR code on error
 		local
 			l_ptr: POINTER
 		do
@@ -132,14 +138,90 @@ feature -- Access
 		end
 
 	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER
+			-- Retrieve a string descriptor in C style ASCII.
+			-- Wrapper around libusb_get_string_descriptor(). Uses the first language supported by the device.
+			-- dev_handle	a device handle
+			-- desc_index	the index of the descriptor to retrieve
+			-- data	output buffer for ASCII string descriptor
+			-- length	size of data buffer
+			-- Result: number of bytes returned in data, or LIBUSB_ERROR code on failure
 		do
 
 			Result := c_libusb_get_string_descriptor_ascii (dev_handle.item, desc_index, data.area.base_address, length)
 			data.from_c (data.area.base_address)
 		end
 
-feature {NONE} -- Implementation
+	libusb_get_ss_endpoint_companion_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; endpoint: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API; ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API): INTEGER
+			-- Get an endpoints superspeed endpoint companion descriptor (if any)
+			-- ctx	the context to operate on, or NULL for the default context
+			-- endpoint	endpoint descriptor from which to get the superspeed endpoint companion descriptor
+			-- ep_comp	output location for the superspeed endpoint companion descriptor. Only valid if 0 was returned. Must be freed with libusb_free_ss_endpoint_companion_descriptor() after use.
+			-- Result:     0 on success  LIBUSB_ERROR_NOT_FOUND if the configuration does not exist another LIBUSB_ERROR code on error.  			
+		local
+			l_ptr: POINTER
+			l_ctx: POINTER
+		do
+			if attached ctx then
+				l_ctx := ctx.item
+			end
+			Result := c_libusb_get_ss_endpoint_companion_descriptor (l_ctx, endpoint.item, $l_ptr)
+			if l_ptr /= default_pointer then
+				ep_comp.make_by_pointer (l_ptr)
+			end
+		end
 
+	libusb_get_bos_descriptor (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API): INTEGER
+			-- Get a Binary Object Store (BOS) descriptor This is a BLOCKING function, which will send requests to the device.
+			-- dev_handle	the handle of an open libusb device
+			-- bos	output location for the BOS descriptor. Only valid if 0 was returned. Must be freed with libusb_free_bos_descriptor() after use.
+			-- Result     0 on success  LIBUSB_ERROR_NOT_FOUND if the device doesn't have a BOS descriptor another LIBUSB_ERROR code on error 		
+		local
+			l_ptr: POINTER
+		do
+			Result := c_libusb_get_bos_descriptor (dev_handle.item, $l_ptr)
+			if l_ptr /= default_pointer then
+				bos.make_by_pointer (l_ptr)
+			end
+		end
+
+	libusb_get_usb_2_0_extension_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API): INTEGER
+			-- Get an USB 2.0 Extension descriptor
+			-- ctx	the context to operate on, or NULL for the default context
+			-- dev_cap	Device Capability descriptor with a bDevCapabilityType of libusb_capability_type::LIBUSB_BT_USB_2_0_EXTENSION LIBUSB_BT_USB_2_0_EXTENSION
+			-- usb_2_0_extension	output location for the USB 2.0 Extension descriptor. Only valid if 0 was returned. Must be freed with libusb_free_usb_2_0_extension_descriptor() after use.
+			-- Result    0 on success  a LIBUSB_ERROR code on error
+		local
+			l_ctx: POINTER
+			l_ptr: POINTER
+		do
+			if attached ctx then
+				l_ctx := ctx.item
+			end
+			Result := c_libusb_get_usb_2_0_extension_descriptor (l_ctx, dev_cap.item, $l_ptr)
+			if l_ptr /= default_pointer then
+				usb_2_0_extension.make_by_pointer (l_ptr)
+			end
+		end
+
+	libusb_get_ss_usb_device_capability_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API): INTEGER
+			-- Get a SuperSpeed USB Device Capability descriptor.
+			-- ctx	the context to operate on, or NULL for the default context
+			-- dev_cap	Device Capability descriptor with a bDevCapabilityType of libusb_capability_type::LIBUSB_BT_SS_USB_DEVICE_CAPABILITY LIBUSB_BT_SS_USB_DEVICE_CAPABILITY
+			-- ss_usb_device_cap	output location for the SuperSpeed USB Device Capability descriptor. Only valid if 0 was returned. Must be freed with libusb_free_ss_usb_device_capability_descriptor() after use.
+		local
+			l_ctx: POINTER
+			l_ptr: POINTER
+		do
+			if attached ctx then
+				l_ctx := ctx.item
+			end
+			Result := c_libusb_get_ss_usb_device_capability_descriptor (l_ctx, dev_cap.item, $l_ptr)
+			if l_ptr /= default_pointer then
+				ss_usb_device_cap.make_by_pointer (l_ptr)
+			end
+		end
+
+feature {NONE} -- Implementation
 
 	libusb_device_at (a_pointer: POINTER; a_index: INTEGER):  POINTER
 		external
