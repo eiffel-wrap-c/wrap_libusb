@@ -22,6 +22,11 @@
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_include>
+		<!--external_include location="`pkg-config -cflags libusb-1.0`">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_include-->
 		<external_include location="$ECF_CONFIG_PATH/generated_wrapper/c/include">
 			<condition>
 				<platform excluded_value="windows"/>
@@ -37,11 +42,19 @@
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_object>
+		
+		<!--external_object location="`pkg-config -cflags -libs libusb-1.0`">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_object-->
+
 		<external_object location="/usr/local/lib/libusb-1.0.so">
 			<condition>
 				<platform excluded_value="windows"/>
 			</condition>
 		</external_object>
+
 		<external_linker_flag value="$ECF_CONFIG_PATH/C/lib/libusb-1.0.lib">
 			<condition>
 				<platform value="windows"/>
