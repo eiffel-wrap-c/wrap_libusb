@@ -240,6 +240,7 @@ feature {ANY} -- Member Access
 			a_value_not_void: a_value /= Void
 			exists: exists
 		do
+			-- TODO check
 			set_c_interface (item, a_value.item)
 		ensure
 			interface_set: attached interface as l_value implies l_value.item = a_value.item

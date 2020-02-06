@@ -259,6 +259,7 @@ feature {ANY} -- Member Access
 			a_value_not_void: a_value /= Void
 			exists: exists
 		do
+			-- TODO check
 			set_c_endpoint (item, a_value.item)
 		ensure
 			endpoint_set: attached endpoint as l_value implies l_value.item = a_value.item

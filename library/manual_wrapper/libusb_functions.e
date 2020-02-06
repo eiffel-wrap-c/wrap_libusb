@@ -23,7 +23,8 @@ inherit
 			libusb_get_ss_endpoint_companion_descriptor as libusb_get_ss_endpoint_companion_descriptor_api,
 			libusb_get_bos_descriptor as libusb_get_bos_descriptor_api,
 			libusb_get_usb_2_0_extension_descriptor as libusb_get_usb_2_0_extension_descriptor_api,
-			libusb_get_ss_usb_device_capability_descriptor as libusb_get_ss_usb_device_capability_descriptor_api
+			libusb_get_ss_usb_device_capability_descriptor as libusb_get_ss_usb_device_capability_descriptor_api,
+			libusb_get_port_numbers as libusb_get_port_numbers_api
 		end
 
 
@@ -117,7 +118,7 @@ feature -- Access
 		do
 			Result := "UNKNOWN"
 			l_ptr := libusb_error_name_api (errcode)
-			if l_ptr /= Void then
+			if l_ptr /= default_pointer then
 				Result := (create {C_STRING}.make_by_pointer (l_ptr)).string
 			end
 		end
@@ -220,6 +221,13 @@ feature -- Access
 				ss_usb_device_cap.make_by_pointer (l_ptr)
 			end
 		end
+
+	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING; port_numbers_len: INTEGER): INTEGER
+		do
+			Result := c_libusb_get_port_numbers (dev.item, port_numbers.area.base_address, port_numbers_len)
+			port_numbers.from_c (port_numbers.area.base_address)
+		end
+
 
 feature {NONE} -- Implementation
 

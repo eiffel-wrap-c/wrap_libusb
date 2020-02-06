@@ -81,6 +81,7 @@ feature {ANY} -- Member Access
 			a_value_not_void: a_value /= Void
 			exists: exists
 		do
+			-- TODO Check
 			set_c_altsetting (item, a_value.item)
 		ensure
 			altsetting_set: attached altsetting as l_value implies l_value.item = a_value.item

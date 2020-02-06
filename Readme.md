@@ -16,4 +16,5 @@ Work in progress
 ## Examples
 
 * [testlibusb](examples/testlibusb)  `Test suite program based of C's libusb-0.1-compat testlibusb example.`
+* [listdevs](examples/listdevs)      `libusb example program to list devices on the bus.`
 
