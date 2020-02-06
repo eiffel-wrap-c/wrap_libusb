@@ -25,6 +25,7 @@ Then add the package libusb to pkg-config search path
 	pkg-config --cflags --libs /usr/local/lib/pkgconfig/libusb-1.0.pc
 
 Check	
+	
 	pkg-config --cflags --libs libusb-1.0
 
 you should see something like
