@@ -52,3 +52,15 @@ Work in progress
 * [testlibusb](examples/testlibusb)  `Test suite program based of C's libusb-0.1-compat testlibusb example.`
 * [listdevs](examples/listdevs)      `libusb example program to list devices on the bus.`
 
+### How to compile the C library glue code.
+
+Before to use the examples you will need to compile the C glue code, go to 
+
+	`library/generated_wrapper/c/src` 
+
+and run
+
+	`finish_freezing --library`
+
+It will copy the C lib `eif_libusb.a` or `eif_libusb.lib` under the library root `$ECF_CONFIG_PATH/C/spec/$(ISE_PLATFORM)/lib/`
+
