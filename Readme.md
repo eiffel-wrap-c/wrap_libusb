@@ -49,8 +49,9 @@ Work in progress
 
 ## Examples
 
-* [testlibusb](examples/testlibusb)  `Test suite program based of C's libusb-0.1-compat testlibusb example.`
-* [listdevs](examples/listdevs)      `libusb example program to list devices on the bus.`
+* [testlibusb](examples/testlibusb)       `Test suite program based of C's libusb-0.1-compat testlibusb example.`
+* [listdevs](examples/listdevs)      	  `libusb example program to list devices on the bus.`
+* [hotplugtest](examples/hotplugtest)     `libusb example program for hotplug API.`
 
 ### How to compile the C library glue code.
 

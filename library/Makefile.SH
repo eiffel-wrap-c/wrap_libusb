@@ -14,7 +14,7 @@ $spitshell >Makefile <<!GROK!THIS!
 SHELL = /bin/sh
 CC= $cc
 AR = ar rc
-CFLAGS = $optimize $ccflags $large -I$rt_include -I/usr/local/include/tensorflow/c -I../../../generated_wrapper/c/include -I../include  -I../../../C/include
+CFLAGS = $optimize $ccflags $large -I$rt_include -I../../../generated_wrapper/c/include -I../include `pkg-config --cflags libusb-1.0` -I../../../C/include
 LDFLAGS = $ldflags
 LIBS = $libs
 MAKE = $make
@@ -29,9 +29,9 @@ $spitshell >>Makefile <<'!NO!SUBS!'
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
-OBJECTS = ewg_libtensorflow_callback_c_glue_code.o
+OBJECTS = ewg_libusb_callback_c_glue_code.o
 
-eif_libtensorflow.a: $(OBJECTS)
+eif_libusb.a: $(OBJECTS)
 	mkdir -p ../../../C/spec/$(PLATFORM)/lib
 	$(RM) $@
 	$(AR) $@ $(OBJECTS)
@@ -39,9 +39,9 @@ eif_libtensorflow.a: $(OBJECTS)
 	$(RANLIB) ../../../C/spec/$(PLATFORM)/lib/$@
 	$(MAKE) clean
 
-	#$(RM) eif_libtensorflow.a $(OBJECTS) Makefile config.sh
+	#$(RM) eif_libusb.a $(OBJECTS) Makefile config.sh
 clean:
-	$(RM) eif_libtensorflow.a $(OBJECTS)
+	$(RM) eif_libusb.a $(OBJECTS)
 !NO!SUBS!
 chmod 644 Makefile
 $eunicefix Makefile

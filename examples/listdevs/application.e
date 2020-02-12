@@ -31,8 +31,8 @@ feature {NONE} -- Initialization
 			ret := LUSB.libusb_get_device_list (Void, list)
 
 			if ret < 0 then
-				print ("Can get the device list")
-					-- Todo print the error message
+				print ("Can't get the device list")
+				print (LUSB.libusb_error_name (ret))
 			else
 				from
 					i := 1

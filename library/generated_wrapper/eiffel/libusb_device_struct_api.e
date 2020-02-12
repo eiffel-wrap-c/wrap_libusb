@@ -10,7 +10,7 @@ inherit
 
 	MEMORY_STRUCTURE
 
-
+	
 create
 
 	make,
@@ -18,7 +18,7 @@ create
 
 feature -- Measurement
 
-	structure_size: INTEGER
+	structure_size: INTEGER 
 		do
 			Result := sizeof_external
 		end
@@ -27,7 +27,7 @@ feature {ANY} -- Member Access
 
 feature {NONE} -- Implementation wrapper for struct struct libusb_device
 
-	sizeof_external: INTEGER
+	sizeof_external: INTEGER 
 		do
 			check
 				size_not_known: False
@@ -35,6 +35,5 @@ feature {NONE} -- Implementation wrapper for struct struct libusb_device
 		ensure
 			is_class: class
 		end
-
 
 end

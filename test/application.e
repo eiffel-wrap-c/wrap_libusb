@@ -9,6 +9,7 @@ feature {NONE} -- Initialization
 		do
 			test_initialize
 			test_device_list
+			test_hotplug_capability
 		end
 
 	test_initialize
@@ -27,7 +28,6 @@ feature {NONE} -- Initialization
 			LUSB.libusb_exit (ctx)
 		end
 
-
 	test_device_list
 		local
 			ret: INTEGER
@@ -45,7 +45,7 @@ feature {NONE} -- Initialization
 			ret := LUSB.libusb_get_device_list (Void, list)
 
 			if ret < 0 then
-				print ("Can get the device list")
+				print ("Can't get the device list")
 				-- Todo print the error message
 			else
 				from
@@ -91,6 +91,19 @@ feature {NONE} -- Initialization
 			LUSB.libusb_exit (Void)
 		end
 
+	test_hotplug_capability
+		local
+			ret: INTEGER
+		do
+			ret := LUSB.libusb_init (Void)
+			check success: ret = 0 end
+			if LUSB.libusb_has_capability ({LIBUSB_CAPABILITY_ENUM_API}.LIBUSB_CAP_HAS_HOTPLUG) > 0 then
+				print ("%NHotplug support is available on this platform.")
+			else
+				print ("%NHotplug support is not available on this platform.")
+			end
+			LUSB.libusb_exit (Void)
+		end
 
 	LUSB: LIBUSB_FUNCTIONS
 		once

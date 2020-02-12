@@ -10,35 +10,141 @@ inherit
 
 	EWG_LIBUSB_CALLBACK_C_GLUE_CODE_FUNCTIONS_API
 		export {NONE} all end
+	DISPOSABLE
 create
 	make
 
 feature -- Initialization
 
-	make (a_routine: like routine) 
+	make
 				-- Dispatcher initialization
 		do
-			routine := a_routine
-			set_libusb_log_cb_entry (Current, $on_callback)
+			routine_1 := agent default_routine
+			routine_2 := agent default_routine
+			routine_3 := agent default_routine
+			routine_4 := agent default_routine
+			routine_5 := agent default_routine
+			set_libusb_log_cb_object ($Current)
 		end
 
 feature --Access: Routine 
 
-	routine: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]]  
+	routine_1: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]] 
+			--Eiffel routine to be call on callback.
+	routine_2: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]] 
+			--Eiffel routine to be call on callback.
+	routine_3: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]] 
+			--Eiffel routine to be call on callback.
+	routine_4: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]] 
+			--Eiffel routine to be call on callback.
+	routine_5: PROCEDURE [TUPLE [a_ctx: POINTER; a_level: INTEGER; a_str: POINTER]] 
 			--Eiffel routine to be call on callback.
 
 feature --Access: Dispatcher
 
-	c_dispatcher: POINTER 
+
+	c_dispatcher_1: POINTER
 		do
-			Result := get_libusb_log_cb_stub
+			Result := get_libusb_log_cb_stub_1
+		end
+
+	c_dispatcher_2: POINTER
+		do
+			Result := get_libusb_log_cb_stub_2
+		end
+
+	c_dispatcher_3: POINTER
+		do
+			Result := get_libusb_log_cb_stub_3
+		end
+
+	c_dispatcher_4: POINTER
+		do
+			Result := get_libusb_log_cb_stub_4
+		end
+
+	c_dispatcher_5: POINTER
+		do
+			Result := get_libusb_log_cb_stub_5
 		end
 
 feature --Access: Callback
 
-	on_callback (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+	on_callback_1 (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
 		do
-			routine (a_ctx, a_level, a_str)
+			routine_1 (a_ctx, a_level, a_str)
 		end
+
+	on_callback_2 (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+		do
+			routine_2 (a_ctx, a_level, a_str)
+		end
+
+	on_callback_3 (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+		do
+			routine_3 (a_ctx, a_level, a_str)
+		end
+
+	on_callback_4 (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+		do
+			routine_4 (a_ctx, a_level, a_str)
+		end
+
+	on_callback_5 (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+		do
+			routine_5 (a_ctx, a_level, a_str)
+		end
+
+
+feature --Register: Callbacks
+
+	register_callback_1 (a_routine: like routine_1)
+		do
+			routine_1 := a_routine
+			set_libusb_log_cb_entry_1 ($on_callback_1)
+		end
+
+	register_callback_2 (a_routine: like routine_1)
+		do
+			routine_2 := a_routine
+			set_libusb_log_cb_entry_2 ($on_callback_2)
+		end
+
+	register_callback_3 (a_routine: like routine_1)
+		do
+			routine_3 := a_routine
+			set_libusb_log_cb_entry_3 ($on_callback_3)
+		end
+
+	register_callback_4 (a_routine: like routine_1)
+		do
+			routine_4 := a_routine
+			set_libusb_log_cb_entry_4 ($on_callback_4)
+		end
+
+	register_callback_5 (a_routine: like routine_1)
+		do
+			routine_5 := a_routine
+			set_libusb_log_cb_entry_5 ($on_callback_5)
+		end
+
+
+feature --Access: Default routine
+
+	default_routine (a_ctx: POINTER; a_level: INTEGER; a_str: POINTER)  
+		do
+			 print ("Default routine")
+		end
+
+
+feature {NONE} -- Implementation
+
+	dispose
+			--Wean `Current'
+		do
+			release_libusb_log_cb_object
+			set_libusb_log_cb_object (default_pointer)
+		end
+
 
 end

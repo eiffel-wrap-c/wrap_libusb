@@ -24,7 +24,9 @@ inherit
 			libusb_get_bos_descriptor as libusb_get_bos_descriptor_api,
 			libusb_get_usb_2_0_extension_descriptor as libusb_get_usb_2_0_extension_descriptor_api,
 			libusb_get_ss_usb_device_capability_descriptor as libusb_get_ss_usb_device_capability_descriptor_api,
-			libusb_get_port_numbers as libusb_get_port_numbers_api
+			libusb_get_port_numbers as libusb_get_port_numbers_api,
+			libusb_hotplug_register_callback as libusb_hotplug_register_callback_api,
+			libusb_handle_events as libusb_handle_events_api
 		end
 
 
@@ -228,6 +230,52 @@ feature -- Access
 			port_numbers.from_c (port_numbers.area.base_address)
 		end
 
+
+	libusb_hotplug_register_callback (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; events: INTEGER; flags: INTEGER; vendor_id: INTEGER; product_id: INTEGER; dev_class: INTEGER; cb_fn: POINTER; user_data: POINTER; callback_handle: POINTER): INTEGER
+			-- Register a hotplug callback function
+			--
+			-- Register a callback with the libusb_context. The callback will fire when a matching event occurs on a matching device.
+			-- The callback is armed until either it is deregistered with libusb_hotplug_deregister_callback() or the supplied callback returns 1 to indicate it is finished processing events.
+			--
+			-- If the LIBUSB_HOTPLUG_ENUMERATE is passed the callback will be called with a LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED for all devices already plugged into the machine.
+			-- Note that libusb modifies its internal device list from a separate thread, while calling hotplug callbacks from libusb_handle_events(),
+			-- so it is possible for a device to already be present on, or removed from, its internal device list, while the hotplug callbacks still need to be dispatched.
+			-- This means that when using LIBUSB_HOTPLUG_ENUMERATE, your callback may be called twice for the arrival of the same device,
+			-- once from libusb_hotplug_register_callback() and once from libusb_handle_events(); and/or your callback may be called for the removal of a device for which an arrived call was never made.
+			--
+			-- Since version 1.0.16, LIBUSB_API_VERSION >= 0x01000102
+			--
+			--  [in]	ctx	context to register this callback with
+  			--  [in]	events	bitwise or of events that will trigger this callback. See libusb_hotplug_event
+			--  [in]	flags	hotplug callback flags. See libusb_hotplug_flag
+			--  [in]	vendor_id	the vendor id to match or LIBUSB_HOTPLUG_MATCH_ANY
+			--  [in]	product_id	the product id to match or LIBUSB_HOTPLUG_MATCH_ANY
+			--  [in]	dev_class	the device class to match or LIBUSB_HOTPLUG_MATCH_ANY
+			--  [in]	cb_fn	the function to be invoked on a matching event/device
+			--  [in]	user_data	user data to pass to the callback function
+			--  [out]	callback_handle	pointer to store the handle of the allocated callback (can be NULL)
+            --
+			-- Result
+			--    LIBUSB_SUCCESS on success LIBUSB_ERROR code on failure
+		local
+			l_ctx: POINTER
+		do
+			if attached ctx then
+				l_ctx := ctx.item
+			end
+			Result := c_libusb_hotplug_register_callback (l_ctx, events, flags, vendor_id, product_id, dev_class, cb_fn, user_data, callback_handle)
+		end
+
+
+	libusb_handle_events (ctx: detachable LIBUSB_CONTEXT_STRUCT_API): INTEGER
+		local
+			l_ctx: POINTER
+		do
+			if attached ctx then
+				l_ctx := ctx.item
+			end
+			Result := c_libusb_handle_events (l_ctx)
+		end
 
 feature {NONE} -- Implementation
 

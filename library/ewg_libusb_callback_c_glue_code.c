@@ -115,14 +115,14 @@ int libusb_hotplug_callback_fn_stub (libusb_context *ctx, libusb_device *device,
 {
 	if (libusb_hotplug_callback_fn_entry.a_class != NULL && libusb_hotplug_callback_fn_entry.feature != NULL)
 	{
-		return libusb_hotplug_callback_fn_entry.feature (eif_access(libusb_hotplug_callback_fn_entry.a_class), ctx, device, event, user_data);
+		return ((libusb_hotplug_callback_fn_eiffel_feature)eif_access(libusb_hotplug_callback_fn_entry.feature) )(eif_access(libusb_hotplug_callback_fn_entry.a_class), ctx, device, event, user_data);
 	}
 }
 
 void set_libusb_hotplug_callback_fn_entry (void* a_class, void* a_feature)
 {
 	libusb_hotplug_callback_fn_entry.a_class = eif_adopt(a_class);
-	libusb_hotplug_callback_fn_entry.feature = (libusb_hotplug_callback_fn_eiffel_feature) a_feature;
+	libusb_hotplug_callback_fn_entry.feature = eif_protect ((libusb_hotplug_callback_fn_eiffel_feature) a_feature);
 }
 
 void* get_libusb_hotplug_callback_fn_stub ()
