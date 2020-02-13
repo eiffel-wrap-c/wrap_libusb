@@ -9,27 +9,27 @@ class LIBUSB_FUNCTIONS_API
 
 feature -- Access
 
-	libusb_init (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_init (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_init (ctx.item)
 		end
 
-	libusb_exit (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_exit (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_exit (ctx.item)
 		end
 
-	libusb_set_debug (ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER) 
+	libusb_set_debug (ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER)
 		do
 			c_libusb_set_debug (ctx.item, level)
 		end
 
-	libusb_set_log_cb (ctx: LIBUSB_CONTEXT_STRUCT_API; cb: POINTER; mode: INTEGER) 
+	libusb_set_log_cb (ctx: LIBUSB_CONTEXT_STRUCT_API; cb: POINTER; mode: INTEGER)
 		do
 			c_libusb_set_log_cb (ctx.item, cb, mode)
 		end
 
-	libusb_get_version: detachable LIBUSB_VERSION_STRUCT_API 
+	libusb_get_version: detachable LIBUSB_VERSION_STRUCT_API
 		do
 			if attached c_libusb_get_version as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -64,22 +64,26 @@ feature -- Access
 			]"
 		end
 
-	libusb_strerror (errcode: INTEGER): POINTER 
-		do
-			Result := c_libusb_strerror (errcode)
+	libusb_strerror (errcode: INTEGER): POINTER
+		external
+			"C inline use <libusb.h>"
+		alias
+			"[
+				return libusb_strerror ((int)$errcode);
+			]"
 		end
 
-	libusb_get_device_list (ctx: LIBUSB_CONTEXT_STRUCT_API; list: LIBUSB_DEVICE_STRUCT_API): INTEGER 
+	libusb_get_device_list (ctx: LIBUSB_CONTEXT_STRUCT_API; list: LIBUSB_DEVICE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_device_list (ctx.item, list.item)
 		end
 
-	libusb_free_device_list (list: LIBUSB_DEVICE_STRUCT_API; unref_devices: INTEGER) 
+	libusb_free_device_list (list: LIBUSB_DEVICE_STRUCT_API; unref_devices: INTEGER)
 		do
 			c_libusb_free_device_list (list.item, unref_devices)
 		end
 
-	libusb_ref_device (dev: LIBUSB_DEVICE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API 
+	libusb_ref_device (dev: LIBUSB_DEVICE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API
 		do
 			if attached c_libusb_ref_device (dev.item) as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -87,102 +91,102 @@ feature -- Access
 
 		end
 
-	libusb_unref_device (dev: LIBUSB_DEVICE_STRUCT_API) 
+	libusb_unref_device (dev: LIBUSB_DEVICE_STRUCT_API)
 		do
 			c_libusb_unref_device (dev.item)
 		end
 
-	libusb_get_configuration (dev: LIBUSB_DEVICE_HANDLE_STRUCT_API; config: POINTER): INTEGER 
+	libusb_get_configuration (dev: LIBUSB_DEVICE_HANDLE_STRUCT_API; config: POINTER): INTEGER
 		do
 			Result := c_libusb_get_configuration (dev.item, config)
 		end
 
-	libusb_get_device_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; desc: LIBUSB_DEVICE_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_device_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; desc: LIBUSB_DEVICE_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_device_descriptor (dev.item, desc.item)
 		end
 
-	libusb_get_active_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_active_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_active_config_descriptor (dev.item, config.item)
 		end
 
-	libusb_get_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config_index: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config_index: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_config_descriptor (dev.item, config_index, config.item)
 		end
 
-	libusb_get_config_descriptor_by_value (dev: LIBUSB_DEVICE_STRUCT_API; bconfigurationvalue: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_config_descriptor_by_value (dev: LIBUSB_DEVICE_STRUCT_API; bconfigurationvalue: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_config_descriptor_by_value (dev.item, bconfigurationvalue, config.item)
 		end
 
-	libusb_free_config_descriptor (config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API) 
+	libusb_free_config_descriptor (config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_config_descriptor (config.item)
 		end
 
-	libusb_get_ss_endpoint_companion_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; endpoint: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API; ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_ss_endpoint_companion_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; endpoint: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API; ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_ss_endpoint_companion_descriptor (ctx.item, endpoint.item, ep_comp.item)
 		end
 
-	libusb_free_ss_endpoint_companion_descriptor (ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API) 
+	libusb_free_ss_endpoint_companion_descriptor (ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_ss_endpoint_companion_descriptor (ep_comp.item)
 		end
 
-	libusb_get_bos_descriptor (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_bos_descriptor (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_bos_descriptor (dev_handle.item, bos.item)
 		end
 
-	libusb_free_bos_descriptor (bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API) 
+	libusb_free_bos_descriptor (bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_bos_descriptor (bos.item)
 		end
 
-	libusb_get_usb_2_0_extension_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_usb_2_0_extension_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_usb_2_0_extension_descriptor (ctx.item, dev_cap.item, usb_2_0_extension.item)
 		end
 
-	libusb_free_usb_2_0_extension_descriptor (usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API) 
+	libusb_free_usb_2_0_extension_descriptor (usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_usb_2_0_extension_descriptor (usb_2_0_extension.item)
 		end
 
-	libusb_get_ss_usb_device_capability_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_ss_usb_device_capability_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_ss_usb_device_capability_descriptor (ctx.item, dev_cap.item, ss_usb_device_cap.item)
 		end
 
-	libusb_free_ss_usb_device_capability_descriptor (ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API) 
+	libusb_free_ss_usb_device_capability_descriptor (ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_ss_usb_device_capability_descriptor (ss_usb_device_cap.item)
 		end
 
-	libusb_get_container_id_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; container_id: LIBUSB_CONTAINER_ID_DESCRIPTOR_STRUCT_API): INTEGER 
+	libusb_get_container_id_descriptor (ctx: LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; container_id: LIBUSB_CONTAINER_ID_DESCRIPTOR_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_container_id_descriptor (ctx.item, dev_cap.item, container_id.item)
 		end
 
-	libusb_free_container_id_descriptor (container_id: LIBUSB_CONTAINER_ID_DESCRIPTOR_STRUCT_API) 
+	libusb_free_container_id_descriptor (container_id: LIBUSB_CONTAINER_ID_DESCRIPTOR_STRUCT_API)
 		do
 			c_libusb_free_container_id_descriptor (container_id.item)
 		end
 
-	libusb_get_bus_number (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER 
+	libusb_get_bus_number (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_bus_number (dev.item)
 		end
 
-	libusb_get_port_number (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER 
+	libusb_get_port_number (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_port_number (dev.item)
 		end
 
-	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING; port_numbers_len: INTEGER): INTEGER 
+	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING; port_numbers_len: INTEGER): INTEGER
 		local
 			port_numbers_c_string: C_STRING
 		do
@@ -190,7 +194,7 @@ feature -- Access
 			Result := c_libusb_get_port_numbers (dev.item, port_numbers_c_string.item, port_numbers_len)
 		end
 
-	libusb_get_port_path (ctx: LIBUSB_CONTEXT_STRUCT_API; dev: LIBUSB_DEVICE_STRUCT_API; path: STRING; path_length: INTEGER): INTEGER 
+	libusb_get_port_path (ctx: LIBUSB_CONTEXT_STRUCT_API; dev: LIBUSB_DEVICE_STRUCT_API; path: STRING; path_length: INTEGER): INTEGER
 		local
 			path_c_string: C_STRING
 		do
@@ -198,7 +202,7 @@ feature -- Access
 			Result := c_libusb_get_port_path (ctx.item, dev.item, path_c_string.item, path_length)
 		end
 
-	libusb_get_parent (dev: LIBUSB_DEVICE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API 
+	libusb_get_parent (dev: LIBUSB_DEVICE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API
 		do
 			if attached c_libusb_get_parent (dev.item) as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -206,42 +210,42 @@ feature -- Access
 
 		end
 
-	libusb_get_device_address (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER 
+	libusb_get_device_address (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_device_address (dev.item)
 		end
 
-	libusb_get_device_speed (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER 
+	libusb_get_device_speed (dev: LIBUSB_DEVICE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_device_speed (dev.item)
 		end
 
-	libusb_get_max_packet_size (dev: LIBUSB_DEVICE_STRUCT_API; endpoint: INTEGER): INTEGER 
+	libusb_get_max_packet_size (dev: LIBUSB_DEVICE_STRUCT_API; endpoint: INTEGER): INTEGER
 		do
 			Result := c_libusb_get_max_packet_size (dev.item, endpoint)
 		end
 
-	libusb_get_max_iso_packet_size (dev: LIBUSB_DEVICE_STRUCT_API; endpoint: INTEGER): INTEGER 
+	libusb_get_max_iso_packet_size (dev: LIBUSB_DEVICE_STRUCT_API; endpoint: INTEGER): INTEGER
 		do
 			Result := c_libusb_get_max_iso_packet_size (dev.item, endpoint)
 		end
 
-	libusb_wrap_sys_device (ctx: LIBUSB_CONTEXT_STRUCT_API; sys_dev: INTEGER; dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER 
+	libusb_wrap_sys_device (ctx: LIBUSB_CONTEXT_STRUCT_API; sys_dev: INTEGER; dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_wrap_sys_device (ctx.item, sys_dev, dev_handle.item)
 		end
 
-	libusb_open (dev: LIBUSB_DEVICE_STRUCT_API; dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER 
+	libusb_open (dev: LIBUSB_DEVICE_STRUCT_API; dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_open (dev.item, dev_handle.item)
 		end
 
-	libusb_close (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API) 
+	libusb_close (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API)
 		do
 			c_libusb_close (dev_handle.item)
 		end
 
-	libusb_get_device (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API 
+	libusb_get_device (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): detachable LIBUSB_DEVICE_STRUCT_API
 		do
 			if attached c_libusb_get_device (dev_handle.item) as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -249,22 +253,22 @@ feature -- Access
 
 		end
 
-	libusb_set_configuration (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; configuration: INTEGER): INTEGER 
+	libusb_set_configuration (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; configuration: INTEGER): INTEGER
 		do
 			Result := c_libusb_set_configuration (dev_handle.item, configuration)
 		end
 
-	libusb_claim_interface (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER 
+	libusb_claim_interface (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER
 		do
 			Result := c_libusb_claim_interface (dev_handle.item, interface_number)
 		end
 
-	libusb_release_interface (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER 
+	libusb_release_interface (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER
 		do
 			Result := c_libusb_release_interface (dev_handle.item, interface_number)
 		end
 
-	libusb_open_device_with_vid_pid (ctx: LIBUSB_CONTEXT_STRUCT_API; vendor_id: INTEGER; product_id: INTEGER): detachable LIBUSB_DEVICE_HANDLE_STRUCT_API 
+	libusb_open_device_with_vid_pid (ctx: LIBUSB_CONTEXT_STRUCT_API; vendor_id: INTEGER; product_id: INTEGER): detachable LIBUSB_DEVICE_HANDLE_STRUCT_API
 		do
 			if attached c_libusb_open_device_with_vid_pid (ctx.item, vendor_id, product_id) as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -272,22 +276,22 @@ feature -- Access
 
 		end
 
-	libusb_set_interface_alt_setting (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER; alternate_setting: INTEGER): INTEGER 
+	libusb_set_interface_alt_setting (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER; alternate_setting: INTEGER): INTEGER
 		do
 			Result := c_libusb_set_interface_alt_setting (dev_handle.item, interface_number, alternate_setting)
 		end
 
-	libusb_clear_halt (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER): INTEGER 
+	libusb_clear_halt (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER): INTEGER
 		do
 			Result := c_libusb_clear_halt (dev_handle.item, endpoint)
 		end
 
-	libusb_reset_device (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER 
+	libusb_reset_device (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_reset_device (dev_handle.item)
 		end
 
-	libusb_alloc_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; num_streams: INTEGER; endpoints: STRING; num_endpoints: INTEGER): INTEGER 
+	libusb_alloc_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; num_streams: INTEGER; endpoints: STRING; num_endpoints: INTEGER): INTEGER
 		local
 			endpoints_c_string: C_STRING
 		do
@@ -295,7 +299,7 @@ feature -- Access
 			Result := c_libusb_alloc_streams (dev_handle.item, num_streams, endpoints_c_string.item, num_endpoints)
 		end
 
-	libusb_free_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoints: STRING; num_endpoints: INTEGER): INTEGER 
+	libusb_free_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoints: STRING; num_endpoints: INTEGER): INTEGER
 		local
 			endpoints_c_string: C_STRING
 		do
@@ -303,12 +307,12 @@ feature -- Access
 			Result := c_libusb_free_streams (dev_handle.item, endpoints_c_string.item, num_endpoints)
 		end
 
-	libusb_dev_mem_alloc (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; length: INTEGER): POINTER 
+	libusb_dev_mem_alloc (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; length: INTEGER): POINTER
 		do
 			Result := c_libusb_dev_mem_alloc (dev_handle.item, length)
 		end
 
-	libusb_dev_mem_free (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; buffer: STRING; length: INTEGER): INTEGER 
+	libusb_dev_mem_free (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; buffer: STRING; length: INTEGER): INTEGER
 		local
 			buffer_c_string: C_STRING
 		do
@@ -316,22 +320,22 @@ feature -- Access
 			Result := c_libusb_dev_mem_free (dev_handle.item, buffer_c_string.item, length)
 		end
 
-	libusb_kernel_driver_active (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER 
+	libusb_kernel_driver_active (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER
 		do
 			Result := c_libusb_kernel_driver_active (dev_handle.item, interface_number)
 		end
 
-	libusb_detach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER 
+	libusb_detach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER
 		do
 			Result := c_libusb_detach_kernel_driver (dev_handle.item, interface_number)
 		end
 
-	libusb_attach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER 
+	libusb_attach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; interface_number: INTEGER): INTEGER
 		do
 			Result := c_libusb_attach_kernel_driver (dev_handle.item, interface_number)
 		end
 
-	libusb_set_auto_detach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; enable: INTEGER): INTEGER 
+	libusb_set_auto_detach_kernel_driver (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; enable: INTEGER): INTEGER
 		do
 			Result := c_libusb_set_auto_detach_kernel_driver (dev_handle.item, enable)
 		end
@@ -345,32 +349,32 @@ feature -- Access
 			]"
 		end
 
-	libusb_submit_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER 
+	libusb_submit_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_submit_transfer (transfer.item)
 		end
 
-	libusb_cancel_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER 
+	libusb_cancel_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_cancel_transfer (transfer.item)
 		end
 
-	libusb_free_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API) 
+	libusb_free_transfer (transfer: LIBUSB_TRANSFER_STRUCT_API)
 		do
 			c_libusb_free_transfer (transfer.item)
 		end
 
-	libusb_transfer_set_stream_id (transfer: LIBUSB_TRANSFER_STRUCT_API; stream_id: INTEGER) 
+	libusb_transfer_set_stream_id (transfer: LIBUSB_TRANSFER_STRUCT_API; stream_id: INTEGER)
 		do
 			c_libusb_transfer_set_stream_id (transfer.item, stream_id)
 		end
 
-	libusb_transfer_get_stream_id (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER 
+	libusb_transfer_get_stream_id (transfer: LIBUSB_TRANSFER_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_transfer_get_stream_id (transfer.item)
 		end
 
-	libusb_control_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; request_type: INTEGER; brequest: INTEGER; wvalue: INTEGER; windex: INTEGER; data: STRING; wlength: INTEGER; timeout: INTEGER): INTEGER 
+	libusb_control_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; request_type: INTEGER; brequest: INTEGER; wvalue: INTEGER; windex: INTEGER; data: STRING; wlength: INTEGER; timeout: INTEGER): INTEGER
 		local
 			data_c_string: C_STRING
 		do
@@ -378,7 +382,7 @@ feature -- Access
 			Result := c_libusb_control_transfer (dev_handle.item, request_type, brequest, wvalue, windex, data_c_string.item, wlength, timeout)
 		end
 
-	libusb_bulk_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
+	libusb_bulk_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER
 		local
 			data_c_string: C_STRING
 		do
@@ -386,7 +390,7 @@ feature -- Access
 			Result := c_libusb_bulk_transfer (dev_handle.item, endpoint, data_c_string.item, length, actual_length, timeout)
 		end
 
-	libusb_interrupt_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
+	libusb_interrupt_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER
 		local
 			data_c_string: C_STRING
 		do
@@ -394,7 +398,7 @@ feature -- Access
 			Result := c_libusb_interrupt_transfer (dev_handle.item, endpoint, data_c_string.item, length, actual_length, timeout)
 		end
 
-	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER 
+	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER
 		local
 			data_c_string: C_STRING
 		do
@@ -402,87 +406,87 @@ feature -- Access
 			Result := c_libusb_get_string_descriptor_ascii (dev_handle.item, desc_index, data_c_string.item, length)
 		end
 
-	libusb_try_lock_events (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_try_lock_events (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_try_lock_events (ctx.item)
 		end
 
-	libusb_lock_events (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_lock_events (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_lock_events (ctx.item)
 		end
 
-	libusb_unlock_events (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_unlock_events (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_unlock_events (ctx.item)
 		end
 
-	libusb_event_handling_ok (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_event_handling_ok (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_event_handling_ok (ctx.item)
 		end
 
-	libusb_event_handler_active (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_event_handler_active (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_event_handler_active (ctx.item)
 		end
 
-	libusb_interrupt_event_handler (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_interrupt_event_handler (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_interrupt_event_handler (ctx.item)
 		end
 
-	libusb_lock_event_waiters (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_lock_event_waiters (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_lock_event_waiters (ctx.item)
 		end
 
-	libusb_unlock_event_waiters (ctx: LIBUSB_CONTEXT_STRUCT_API) 
+	libusb_unlock_event_waiters (ctx: LIBUSB_CONTEXT_STRUCT_API)
 		do
 			c_libusb_unlock_event_waiters (ctx.item)
 		end
 
-	libusb_wait_for_event (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER 
+	libusb_wait_for_event (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_wait_for_event (ctx.item, tv.item)
 		end
 
-	libusb_handle_events_timeout (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER 
+	libusb_handle_events_timeout (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_handle_events_timeout (ctx.item, tv.item)
 		end
 
-	libusb_handle_events_timeout_completed (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API; completed: POINTER): INTEGER 
+	libusb_handle_events_timeout_completed (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API; completed: POINTER): INTEGER
 		do
 			Result := c_libusb_handle_events_timeout_completed (ctx.item, tv.item, completed)
 		end
 
-	libusb_handle_events (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_handle_events (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_handle_events (ctx.item)
 		end
 
-	libusb_handle_events_completed (ctx: LIBUSB_CONTEXT_STRUCT_API; completed: POINTER): INTEGER 
+	libusb_handle_events_completed (ctx: LIBUSB_CONTEXT_STRUCT_API; completed: POINTER): INTEGER
 		do
 			Result := c_libusb_handle_events_completed (ctx.item, completed)
 		end
 
-	libusb_handle_events_locked (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER 
+	libusb_handle_events_locked (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_handle_events_locked (ctx.item, tv.item)
 		end
 
-	libusb_pollfds_handle_timeouts (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER 
+	libusb_pollfds_handle_timeouts (ctx: LIBUSB_CONTEXT_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_pollfds_handle_timeouts (ctx.item)
 		end
 
-	libusb_get_next_timeout (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER 
+	libusb_get_next_timeout (ctx: LIBUSB_CONTEXT_STRUCT_API; tv: TIMEVAL_STRUCT_API): INTEGER
 		do
 			Result := c_libusb_get_next_timeout (ctx.item, tv.item)
 		end
 
-	libusb_get_pollfds (ctx: LIBUSB_CONTEXT_STRUCT_API): detachable LIBUSB_POLLFD_STRUCT_API 
+	libusb_get_pollfds (ctx: LIBUSB_CONTEXT_STRUCT_API): detachable LIBUSB_POLLFD_STRUCT_API
 		do
 			if attached c_libusb_get_pollfds (ctx.item) as l_ptr and then not l_ptr.is_default_pointer then
 				create Result.make_by_pointer ( l_ptr )
@@ -490,27 +494,32 @@ feature -- Access
 
 		end
 
-	libusb_free_pollfds (pollfds: LIBUSB_POLLFD_STRUCT_API) 
+	libusb_free_pollfds (pollfds: LIBUSB_POLLFD_STRUCT_API)
 		do
 			c_libusb_free_pollfds (pollfds.item)
 		end
 
-	libusb_set_pollfd_notifiers (ctx: LIBUSB_CONTEXT_STRUCT_API; added_cb: POINTER; removed_cb: POINTER; user_data: POINTER) 
+	libusb_set_pollfd_notifiers (ctx: LIBUSB_CONTEXT_STRUCT_API; added_cb: POINTER; removed_cb: POINTER; user_data: POINTER)
 		do
 			c_libusb_set_pollfd_notifiers (ctx.item, added_cb, removed_cb, user_data)
 		end
 
-	libusb_hotplug_register_callback (ctx: LIBUSB_CONTEXT_STRUCT_API; events: INTEGER; flags: INTEGER; vendor_id: INTEGER; product_id: INTEGER; dev_class: INTEGER; cb_fn: POINTER; user_data: POINTER; callback_handle: POINTER): INTEGER 
+	libusb_hotplug_register_callback (ctx: LIBUSB_CONTEXT_STRUCT_API; events: INTEGER; flags: INTEGER; vendor_id: INTEGER; product_id: INTEGER; dev_class: INTEGER; cb_fn: POINTER; user_data: POINTER; callback_handle: POINTER): INTEGER
 		do
 			Result := c_libusb_hotplug_register_callback (ctx.item, events, flags, vendor_id, product_id, dev_class, cb_fn, user_data, callback_handle)
 		end
 
-	libusb_hotplug_deregister_callback (ctx: LIBUSB_CONTEXT_STRUCT_API; callback_handle: INTEGER) 
+	libusb_hotplug_deregister_callback (ctx: LIBUSB_CONTEXT_STRUCT_API; callback_handle: INTEGER)
 		do
 			c_libusb_hotplug_deregister_callback (ctx.item, callback_handle)
 		end
 
-	libusb_set_option (ctx: LIBUSB_CONTEXT_STRUCT_API; option: INTEGER): INTEGER 
+	libusb_hotplug_get_user_data (ctx: LIBUSB_CONTEXT_STRUCT_API; callback_handle: INTEGER): POINTER
+		do
+			Result := c_libusb_hotplug_get_user_data (ctx.item, callback_handle)
+		end
+
+	libusb_set_option (ctx: LIBUSB_CONTEXT_STRUCT_API; option: INTEGER): INTEGER
 		do
 			Result := c_libusb_set_option (ctx.item, option)
 		end
@@ -559,15 +568,6 @@ feature -- Externals
 		alias
 			"[
 				return libusb_get_version ();
-			]"
-		end
-
-	c_libusb_strerror (errcode: INTEGER): POINTER
-		external
-			"C inline use <libusb.h>"
-		alias
-			"[
-				return libusb_strerror ((enum libusb_error)$errcode);
 			]"
 		end
 
@@ -1270,6 +1270,19 @@ feature -- Externals
 		alias
 			"[
 				libusb_hotplug_deregister_callback ((libusb_context*)$ctx, (libusb_hotplug_callback_handle)$callback_handle);
+			]"
+		end
+
+	c_libusb_hotplug_get_user_data (ctx: POINTER; callback_handle: INTEGER): POINTER
+		external
+			"C inline use <libusb.h>"
+		alias
+			"[
+				#ifdef _MSC_VER
+				return libusb_hotplug_get_user_data ((struct libusb_context*)$ctx, (libusb_hotplug_callback_handle)$callback_handle);
+                #else
+                return NULL
+                #endif			
 			]"
 		end
 
