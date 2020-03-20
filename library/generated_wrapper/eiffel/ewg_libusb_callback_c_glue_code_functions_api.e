@@ -50,24 +50,6 @@ feature -- Access
 			]"
 		end
 
-	get_libusb_log_cb_stub_4: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_log_cb_stub_4 ();
-			]"
-		end
-
-	get_libusb_log_cb_stub_5: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_log_cb_stub_5 ();
-			]"
-		end
-
 	set_libusb_log_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_log_cb_entry_1 (a_feature)
@@ -81,16 +63,6 @@ feature -- Access
 	set_libusb_log_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_log_cb_entry_3 (a_feature)
-		end
-
-	set_libusb_log_cb_entry_4 (a_feature: POINTER) 
-		do
-			c_set_libusb_log_cb_entry_4 (a_feature)
-		end
-
-	set_libusb_log_cb_entry_5 (a_feature: POINTER) 
-		do
-			c_set_libusb_log_cb_entry_5 (a_feature)
 		end
 
 	call_libusb_log_cb (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER; str: STRING) 
@@ -142,24 +114,6 @@ feature -- Access
 			]"
 		end
 
-	get_libusb_pollfd_added_cb_stub_4: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_pollfd_added_cb_stub_4 ();
-			]"
-		end
-
-	get_libusb_pollfd_added_cb_stub_5: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_pollfd_added_cb_stub_5 ();
-			]"
-		end
-
 	set_libusb_pollfd_added_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_entry_1 (a_feature)
@@ -173,16 +127,6 @@ feature -- Access
 	set_libusb_pollfd_added_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_entry_3 (a_feature)
-		end
-
-	set_libusb_pollfd_added_cb_entry_4 (a_feature: POINTER) 
-		do
-			c_set_libusb_pollfd_added_cb_entry_4 (a_feature)
-		end
-
-	set_libusb_pollfd_added_cb_entry_5 (a_feature: POINTER) 
-		do
-			c_set_libusb_pollfd_added_cb_entry_5 (a_feature)
 		end
 
 	call_libusb_pollfd_added_cb (a_function: POINTER; fd: INTEGER; events: INTEGER; user_data: POINTER) 
@@ -231,24 +175,6 @@ feature -- Access
 			]"
 		end
 
-	get_libusb_pollfd_removed_cb_stub_4: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_pollfd_removed_cb_stub_4 ();
-			]"
-		end
-
-	get_libusb_pollfd_removed_cb_stub_5: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_pollfd_removed_cb_stub_5 ();
-			]"
-		end
-
 	set_libusb_pollfd_removed_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_entry_1 (a_feature)
@@ -262,16 +188,6 @@ feature -- Access
 	set_libusb_pollfd_removed_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_entry_3 (a_feature)
-		end
-
-	set_libusb_pollfd_removed_cb_entry_4 (a_feature: POINTER) 
-		do
-			c_set_libusb_pollfd_removed_cb_entry_4 (a_feature)
-		end
-
-	set_libusb_pollfd_removed_cb_entry_5 (a_feature: POINTER) 
-		do
-			c_set_libusb_pollfd_removed_cb_entry_5 (a_feature)
 		end
 
 	call_libusb_pollfd_removed_cb (a_function: POINTER; fd: INTEGER; user_data: POINTER) 
@@ -320,24 +236,6 @@ feature -- Access
 			]"
 		end
 
-	get_libusb_hotplug_callback_fn_stub_4: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_hotplug_callback_fn_stub_4 ();
-			]"
-		end
-
-	get_libusb_hotplug_callback_fn_stub_5: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_hotplug_callback_fn_stub_5 ();
-			]"
-		end
-
 	set_libusb_hotplug_callback_fn_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_entry_1 (a_feature)
@@ -351,16 +249,6 @@ feature -- Access
 	set_libusb_hotplug_callback_fn_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_entry_3 (a_feature)
-		end
-
-	set_libusb_hotplug_callback_fn_entry_4 (a_feature: POINTER) 
-		do
-			c_set_libusb_hotplug_callback_fn_entry_4 (a_feature)
-		end
-
-	set_libusb_hotplug_callback_fn_entry_5 (a_feature: POINTER) 
-		do
-			c_set_libusb_hotplug_callback_fn_entry_5 (a_feature)
 		end
 
 	call_libusb_hotplug_callback_fn (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; device: LIBUSB_DEVICE_STRUCT_API; event: INTEGER; user_data: POINTER): INTEGER 
@@ -409,24 +297,6 @@ feature -- Access
 			]"
 		end
 
-	get_libusb_transfer_cb_fn_stub_4: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_transfer_cb_fn_stub_4 ();
-			]"
-		end
-
-	get_libusb_transfer_cb_fn_stub_5: POINTER
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				return get_libusb_transfer_cb_fn_stub_5 ();
-			]"
-		end
-
 	set_libusb_transfer_cb_fn_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_entry_1 (a_feature)
@@ -440,16 +310,6 @@ feature -- Access
 	set_libusb_transfer_cb_fn_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_entry_3 (a_feature)
-		end
-
-	set_libusb_transfer_cb_fn_entry_4 (a_feature: POINTER) 
-		do
-			c_set_libusb_transfer_cb_fn_entry_4 (a_feature)
-		end
-
-	set_libusb_transfer_cb_fn_entry_5 (a_feature: POINTER) 
-		do
-			c_set_libusb_transfer_cb_fn_entry_5 (a_feature)
 		end
 
 	call_libusb_transfer_cb_fn (a_function: POINTER; transfer: LIBUSB_TRANSFER_STRUCT_API) 
@@ -492,24 +352,6 @@ feature -- Externals
 		alias
 			"[
 				set_libusb_log_cb_entry_3 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_log_cb_entry_4 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_log_cb_entry_4 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_log_cb_entry_5 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_log_cb_entry_5 ((void*)$a_feature);
 			]"
 		end
 
@@ -558,24 +400,6 @@ feature -- Externals
 			]"
 		end
 
-	c_set_libusb_pollfd_added_cb_entry_4 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_pollfd_added_cb_entry_4 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_pollfd_added_cb_entry_5 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_pollfd_added_cb_entry_5 ((void*)$a_feature);
-			]"
-		end
-
 	c_call_libusb_pollfd_added_cb (a_function: POINTER; fd: INTEGER; events: INTEGER; user_data: POINTER)
 		external
 			"C inline use <ewg_libusb_callback_c_glue_code.h>"
@@ -618,24 +442,6 @@ feature -- Externals
 		alias
 			"[
 				set_libusb_pollfd_removed_cb_entry_3 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_pollfd_removed_cb_entry_4 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_pollfd_removed_cb_entry_4 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_pollfd_removed_cb_entry_5 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_pollfd_removed_cb_entry_5 ((void*)$a_feature);
 			]"
 		end
 
@@ -684,24 +490,6 @@ feature -- Externals
 			]"
 		end
 
-	c_set_libusb_hotplug_callback_fn_entry_4 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_hotplug_callback_fn_entry_4 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_hotplug_callback_fn_entry_5 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_hotplug_callback_fn_entry_5 ((void*)$a_feature);
-			]"
-		end
-
 	c_call_libusb_hotplug_callback_fn (a_function: POINTER; ctx: POINTER; device: POINTER; event: INTEGER; user_data: POINTER): INTEGER
 		external
 			"C inline use <ewg_libusb_callback_c_glue_code.h>"
@@ -744,24 +532,6 @@ feature -- Externals
 		alias
 			"[
 				set_libusb_transfer_cb_fn_entry_3 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_transfer_cb_fn_entry_4 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_transfer_cb_fn_entry_4 ((void*)$a_feature);
-			]"
-		end
-
-	c_set_libusb_transfer_cb_fn_entry_5 (a_feature: POINTER)
-		external
-			"C inline use <ewg_libusb_callback_c_glue_code.h>"
-		alias
-			"[
-				set_libusb_transfer_cb_fn_entry_5 ((void*)$a_feature);
 			]"
 		end
 

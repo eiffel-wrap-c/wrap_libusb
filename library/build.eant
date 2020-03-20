@@ -81,7 +81,7 @@
   </target>
 
   <target name="compile" depend="init_wrap_c"> 
-    <geant file="${wrap_c.wrapper_dir}${path_separator}c${path_separator}src${path_separator}geant.eant" target="compile" dir="${wrap_c.wrapper_dir}${path_separator}c${path_separator}src"/>
+    <geant file="${wrap_c.wrapper_dir}${path_separator}c${path_separator}src${path_separator}build.eant" target="compile" dir="${wrap_c.wrapper_dir}${path_separator}c${path_separator}src"/>
   </target>
 
   <target name="clobber" depend="clean" />
