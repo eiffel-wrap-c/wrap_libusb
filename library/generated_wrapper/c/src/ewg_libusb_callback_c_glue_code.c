@@ -23,7 +23,11 @@ void release_libusb_log_cb_object ()
 	eif_wean (libusb_log_cb_object);
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_log_cb_stub_1 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#else
 void libusb_log_cb_stub_1 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#endif
 {
 	if (libusb_log_cb_object != NULL && libusb_log_cb_address_1 != NULL)
 	{
@@ -31,7 +35,11 @@ void libusb_log_cb_stub_1 (libusb_context *ctx, enum libusb_log_level level, cha
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_log_cb_stub_2 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#else
 void libusb_log_cb_stub_2 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#endif
 {
 	if (libusb_log_cb_object != NULL && libusb_log_cb_address_2 != NULL)
 	{
@@ -39,7 +47,11 @@ void libusb_log_cb_stub_2 (libusb_context *ctx, enum libusb_log_level level, cha
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_log_cb_stub_3 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#else
 void libusb_log_cb_stub_3 (libusb_context *ctx, enum libusb_log_level level, char const *str)
+#endif
 {
 	if (libusb_log_cb_object != NULL && libusb_log_cb_address_3 != NULL)
 	{
@@ -73,7 +85,11 @@ void* get_libusb_log_cb_stub_3 (){
 
 void call_libusb_log_cb (void *a_function, libusb_context *ctx, enum libusb_log_level level, char const *str)
 {
+	#ifdef _MSC_VER
+	((void (__stdcall *) (libusb_context *ctx, enum libusb_log_level level, char const *str))a_function) (ctx, level, str);
+	#else
 	((void (*) (libusb_context *ctx, enum libusb_log_level level, char const *str))a_function) (ctx, level, str);
+	#endif	
 }
 
 void* libusb_pollfd_added_cb_object =  NULL;
@@ -95,7 +111,11 @@ void release_libusb_pollfd_added_cb_object ()
 	eif_wean (libusb_pollfd_added_cb_object);
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_added_cb_stub_1 (int fd, short events, void *user_data)
+#else
 void libusb_pollfd_added_cb_stub_1 (int fd, short events, void *user_data)
+#endif
 {
 	if (libusb_pollfd_added_cb_object != NULL && libusb_pollfd_added_cb_address_1 != NULL)
 	{
@@ -103,7 +123,11 @@ void libusb_pollfd_added_cb_stub_1 (int fd, short events, void *user_data)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_added_cb_stub_2 (int fd, short events, void *user_data)
+#else
 void libusb_pollfd_added_cb_stub_2 (int fd, short events, void *user_data)
+#endif
 {
 	if (libusb_pollfd_added_cb_object != NULL && libusb_pollfd_added_cb_address_2 != NULL)
 	{
@@ -111,7 +135,11 @@ void libusb_pollfd_added_cb_stub_2 (int fd, short events, void *user_data)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_added_cb_stub_3 (int fd, short events, void *user_data)
+#else
 void libusb_pollfd_added_cb_stub_3 (int fd, short events, void *user_data)
+#endif
 {
 	if (libusb_pollfd_added_cb_object != NULL && libusb_pollfd_added_cb_address_3 != NULL)
 	{
@@ -145,7 +173,11 @@ void* get_libusb_pollfd_added_cb_stub_3 (){
 
 void call_libusb_pollfd_added_cb (void *a_function, int fd, short events, void *user_data)
 {
+	#ifdef _MSC_VER
+	((void (__stdcall *) (int fd, short events, void *user_data))a_function) (fd, events, user_data);
+	#else
 	((void (*) (int fd, short events, void *user_data))a_function) (fd, events, user_data);
+	#endif
 }
 
 void* libusb_pollfd_removed_cb_object =  NULL;
@@ -167,7 +199,11 @@ void release_libusb_pollfd_removed_cb_object ()
 	eif_wean (libusb_pollfd_removed_cb_object);
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_removed_cb_stub_1 (int fd, void *user_data)
+#else
 void libusb_pollfd_removed_cb_stub_1 (int fd, void *user_data)
+#endif
 {
 	if (libusb_pollfd_removed_cb_object != NULL && libusb_pollfd_removed_cb_address_1 != NULL)
 	{
@@ -175,7 +211,11 @@ void libusb_pollfd_removed_cb_stub_1 (int fd, void *user_data)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_removed_cb_stub_2 (int fd, void *user_data)
+#else
 void libusb_pollfd_removed_cb_stub_2 (int fd, void *user_data)
+#endif
 {
 	if (libusb_pollfd_removed_cb_object != NULL && libusb_pollfd_removed_cb_address_2 != NULL)
 	{
@@ -183,7 +223,11 @@ void libusb_pollfd_removed_cb_stub_2 (int fd, void *user_data)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_pollfd_removed_cb_stub_3 (int fd, void *user_data)
+#else
 void libusb_pollfd_removed_cb_stub_3 (int fd, void *user_data)
+#endif
 {
 	if (libusb_pollfd_removed_cb_object != NULL && libusb_pollfd_removed_cb_address_3 != NULL)
 	{
@@ -217,7 +261,11 @@ void* get_libusb_pollfd_removed_cb_stub_3 (){
 
 void call_libusb_pollfd_removed_cb (void *a_function, int fd, void *user_data)
 {
+	#ifdef _MSC_VER
+	((void (__stdcall *) (int fd, void *user_data))a_function) (fd, user_data);
+	#else
 	((void (*) (int fd, void *user_data))a_function) (fd, user_data);
+	#endif
 }
 
 void* libusb_hotplug_callback_fn_object =  NULL;
@@ -239,7 +287,11 @@ void release_libusb_hotplug_callback_fn_object ()
 	eif_wean (libusb_hotplug_callback_fn_object);
 }
 
+#ifdef _MSC_VER
+int __stdcall libusb_hotplug_callback_fn_stub_1 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#else
 int libusb_hotplug_callback_fn_stub_1 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#endif
 {
 	if (libusb_hotplug_callback_fn_object != NULL && libusb_hotplug_callback_fn_address_1 != NULL)
 	{
@@ -247,7 +299,11 @@ int libusb_hotplug_callback_fn_stub_1 (libusb_context *ctx, libusb_device *devic
 	}
 }
 
+#ifdef _MSC_VER
+int __stdcall libusb_hotplug_callback_fn_stub_2 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#else
 int libusb_hotplug_callback_fn_stub_2 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#endif
 {
 	if (libusb_hotplug_callback_fn_object != NULL && libusb_hotplug_callback_fn_address_2 != NULL)
 	{
@@ -255,7 +311,11 @@ int libusb_hotplug_callback_fn_stub_2 (libusb_context *ctx, libusb_device *devic
 	}
 }
 
+#ifdef _MSC_VER
+int __stdcall libusb_hotplug_callback_fn_stub_3 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#else
 int libusb_hotplug_callback_fn_stub_3 (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
+#endif
 {
 	if (libusb_hotplug_callback_fn_object != NULL && libusb_hotplug_callback_fn_address_3 != NULL)
 	{
@@ -289,7 +349,11 @@ void* get_libusb_hotplug_callback_fn_stub_3 (){
 
 int call_libusb_hotplug_callback_fn (void *a_function, libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data)
 {
+	#ifdef _MSC_VER
+	return ((int (__stdcall *) (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data))a_function) (ctx, device, event, user_data);
+	#else
 	return ((int (*) (libusb_context *ctx, libusb_device *device, libusb_hotplug_event event, void *user_data))a_function) (ctx, device, event, user_data);
+	#endif
 }
 
 void* libusb_transfer_cb_fn_object =  NULL;
@@ -311,7 +375,11 @@ void release_libusb_transfer_cb_fn_object ()
 	eif_wean (libusb_transfer_cb_fn_object);
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_transfer_cb_fn_stub_1 (struct libusb_transfer *transfer)
+#else
 void libusb_transfer_cb_fn_stub_1 (struct libusb_transfer *transfer)
+#endif
 {
 	if (libusb_transfer_cb_fn_object != NULL && libusb_transfer_cb_fn_address_1 != NULL)
 	{
@@ -319,7 +387,11 @@ void libusb_transfer_cb_fn_stub_1 (struct libusb_transfer *transfer)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_transfer_cb_fn_stub_2 (struct libusb_transfer *transfer)
+#else
 void libusb_transfer_cb_fn_stub_2 (struct libusb_transfer *transfer)
+#endif
 {
 	if (libusb_transfer_cb_fn_object != NULL && libusb_transfer_cb_fn_address_2 != NULL)
 	{
@@ -327,7 +399,11 @@ void libusb_transfer_cb_fn_stub_2 (struct libusb_transfer *transfer)
 	}
 }
 
+#ifdef _MSC_VER
+void __stdcall libusb_transfer_cb_fn_stub_3 (struct libusb_transfer *transfer)
+#else
 void libusb_transfer_cb_fn_stub_3 (struct libusb_transfer *transfer)
+#endif
 {
 	if (libusb_transfer_cb_fn_object != NULL && libusb_transfer_cb_fn_address_3 != NULL)
 	{
@@ -361,6 +437,10 @@ void* get_libusb_transfer_cb_fn_stub_3 (){
 
 void call_libusb_transfer_cb_fn (void *a_function, struct libusb_transfer *transfer)
 {
+	#ifdef _MSC_VER
+	((void (__stdcall *) (struct libusb_transfer *transfer))a_function) (transfer);
+	#else
 	((void (*) (struct libusb_transfer *transfer))a_function) (transfer);
+	#endif
 }
 
