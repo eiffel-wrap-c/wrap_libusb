@@ -33,14 +33,17 @@ you should see something like
 	-I/usr/local/include/libusb-1.0 -L/usr/local/lib -lusb-1.0
 
 ### Windows
+Using vcpkg (https://github.com/microsoft/vcpkg) tool, you can install libusb library
 
-Download the latest windows binaries https://github.com/libusb/libusb/releases/download/v1.0.23/libusb-1.0.23.7z
+```
+	vcpkg install libusb:x64-windows-static
+```
+
 Copy the library `libusb-1.0.lib` to `library\C\lib`
 		
 To learn more check the libusb wiki pages 
 
 * https://github.com/libusb/libusb/wiki
-* https://github.com/libusb/libusb/wiki/Windows
 
 ## Status
 

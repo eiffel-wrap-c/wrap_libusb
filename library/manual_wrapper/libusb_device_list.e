@@ -5,7 +5,9 @@ note
 
 class
 	LIBUSB_DEVICE_LIST
+
 inherit
+
 	ANY
 		redefine
 			default_create

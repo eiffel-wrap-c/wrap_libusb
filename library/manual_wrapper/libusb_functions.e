@@ -45,6 +45,8 @@ feature -- Access
 			if attached ctx and then l_ptr /= default_pointer then
 				ctx.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_exit (ctx: detachable LIBUSB_CONTEXT_STRUCT_API)
@@ -57,6 +59,8 @@ feature -- Access
 				l_ptr := ctx.item
 			end
 			c_libusb_exit (l_ptr)
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_device_list (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; list: LIBUSB_DEVICE_LIST): INTEGER
@@ -85,7 +89,8 @@ feature -- Access
 				list.force (create {LIBUSB_DEVICE_STRUCT_API}.make_by_pointer (libusb_device_at (l_ptr, i)))
 				i := i + 1
 			end
-
+		ensure
+			instance_free: class
 		end
 
 	libusb_free_device_list (list: LIBUSB_DEVICE_LIST; a_ref: BOOLEAN)
@@ -95,6 +100,8 @@ feature -- Access
 			-- a_ref :whether to unref the devices in the list
 		do
 			c_libusb_free_device_list (list.item, a_ref.to_integer)
+		ensure
+			instance_free: class
 		end
 
 
@@ -111,6 +118,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				dev_handle.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_error_name (errcode: INTEGER): STRING
@@ -123,6 +132,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				Result := (create {C_STRING}.make_by_pointer (l_ptr)).string
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_config_descriptor (dev: LIBUSB_DEVICE_STRUCT_API; config_index: INTEGER; config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API): INTEGER
@@ -138,6 +149,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				config.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER
@@ -152,6 +165,8 @@ feature -- Access
 
 			Result := c_libusb_get_string_descriptor_ascii (dev_handle.item, desc_index, data.area.base_address, length)
 			data.from_c (data.area.base_address)
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_ss_endpoint_companion_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; endpoint: LIBUSB_ENDPOINT_DESCRIPTOR_STRUCT_API; ep_comp: LIBUSB_SS_ENDPOINT_COMPANION_DESCRIPTOR_STRUCT_API): INTEGER
@@ -171,6 +186,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				ep_comp.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_bos_descriptor (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; bos: LIBUSB_BOS_DESCRIPTOR_STRUCT_API): INTEGER
@@ -185,6 +202,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				bos.make_by_pointer (l_ptr)
 			end
+		ensure
+			intance_free: class
 		end
 
 	libusb_get_usb_2_0_extension_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; usb_2_0_extension: LIBUSB_USB_2_0_EXTENSION_DESCRIPTOR_STRUCT_API): INTEGER
@@ -204,6 +223,8 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				usb_2_0_extension.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_ss_usb_device_capability_descriptor (ctx: detachable LIBUSB_CONTEXT_STRUCT_API; dev_cap: LIBUSB_BOS_DEV_CAPABILITY_DESCRIPTOR_STRUCT_API; ss_usb_device_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API): INTEGER
@@ -222,12 +243,16 @@ feature -- Access
 			if l_ptr /= default_pointer then
 				ss_usb_device_cap.make_by_pointer (l_ptr)
 			end
+		ensure
+			instance_free: class
 		end
 
 	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING; port_numbers_len: INTEGER): INTEGER
 		do
 			Result := c_libusb_get_port_numbers (dev.item, port_numbers.area.base_address, port_numbers_len)
 			port_numbers.from_c (port_numbers.area.base_address)
+		ensure
+			instance_free: class
 		end
 
 
@@ -264,6 +289,8 @@ feature -- Access
 				l_ctx := ctx.item
 			end
 			Result := c_libusb_hotplug_register_callback (l_ctx, events, flags, vendor_id, product_id, dev_class, cb_fn, user_data, callback_handle)
+		ensure
+			instance_free: class
 		end
 
 
@@ -275,6 +302,8 @@ feature -- Access
 				l_ctx := ctx.item
 			end
 			Result := c_libusb_handle_events (l_ctx)
+		ensure
+			instance_free: class
 		end
 
 feature {NONE} -- Implementation
