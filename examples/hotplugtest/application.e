@@ -49,22 +49,22 @@ feature {NONE} -- Initialization
 
 
 
-			ret := LUSB.libusb_init (Void)
+			ret := {LIBUSB_FUNCTIONS}.libusb_init (Void)
 			if ret < 0 then
-				print("%NFailed to initialise libusb: " + LUSB.libusb_error_name(ret))
+				print("%NFailed to initialise libusb: " + {LIBUSB_FUNCTIONS}.libusb_error_name(ret))
 			else
-				if LUSB.libusb_has_capability ({LIBUSB_CAPABILITY_ENUM_API}.LIBUSB_CAP_HAS_HOTPLUG) > 0 then
+				if {LIBUSB_FUNCTIONS}.libusb_has_capability ({LIBUSB_CAPABILITY_ENUM_API}.LIBUSB_CAP_HAS_HOTPLUG) > 0 then
 
 					create callback.make
 					callback.register_callback_1 (agent hotplug_callback)
-					ret := LUSB.libusb_hotplug_register_callback (Void, {LIBUSB_HOTPLUG_EVENT_ENUM_API}.LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED, 0, vendor_id,
+					ret := {LIBUSB_FUNCTIONS}.libusb_hotplug_register_callback (Void, {LIBUSB_HOTPLUG_EVENT_ENUM_API}.LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED, 0, vendor_id,
 																product_id, class_id, callback.c_dispatcher_1, default_pointer, $hotplug_callback_handle1)
 
 					if {LIBUSB_ERROR_ENUM_API}.LIBUSB_SUCCESS /= ret  then
 						print ("%NError registering callback")
 					else
 						callback.register_callback_2 (agent hotplug_callback_detach)
-						ret := LUSB.libusb_hotplug_register_callback (Void, {LIBUSB_HOTPLUG_EVENT_ENUM_API}.LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT, 0, vendor_id,
+						ret := {LIBUSB_FUNCTIONS}.libusb_hotplug_register_callback (Void, {LIBUSB_HOTPLUG_EVENT_ENUM_API}.LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT, 0, vendor_id,
 																					product_id, class_id, callback.c_dispatcher_2, default_pointer, $hotplug_callback_handle2)
 
 						if {LIBUSB_ERROR_ENUM_API}.LIBUSB_SUCCESS /= ret  then
@@ -74,14 +74,14 @@ feature {NONE} -- Initialization
 							until
 								done = 2
 							loop
-								ret := LUSB.libusb_handle_events (Void)
+								ret := {LIBUSB_FUNCTIONS}.libusb_handle_events (Void)
 								if (ret < 0) then
-									print ("Libusb_handle_events() failed:" + LUSB.libusb_error_name(ret))
+									print ("Libusb_handle_events() failed:" + {LIBUSB_FUNCTIONS}.libusb_error_name(ret))
 								end
 							end
 
 							if attached handle as l_handle then
-								LUSB.libusb_close (l_handle)
+								{LIBUSB_FUNCTIONS}.libusb_close (l_handle)
 							end
 						end
 					end
@@ -89,7 +89,7 @@ feature {NONE} -- Initialization
 					print ("Hotplug capabilites are not supported on this platform%N");
 				end
 			end
-			LUSB.libusb_exit (Void)
+			{LIBUSB_FUNCTIONS}.libusb_exit (Void)
 		end
 
 feature -- Callback
@@ -103,18 +103,18 @@ feature -- Callback
 		do
 			create desc.make
 			create l_dev.make_by_pointer (dev)
-			rc := LUSB.libusb_get_device_descriptor(l_dev, desc);
+			rc := {LIBUSB_FUNCTIONS}.libusb_get_device_descriptor(l_dev, desc);
 			if {LIBUSB_ERROR_ENUM_API}.LIBUSB_SUCCESS /= rc then
 				print ("%NError getting device descriptor")
 			end
 			print ("%NDevice attached: " + desc.idVendor.to_hex_string + ":" + desc.idProduct.to_hex_string)
 			if attached handle as l_handle then
-				LUSB.libusb_close (l_handle)
+				{LIBUSB_FUNCTIONS}.libusb_close (l_handle)
 				handle := Void
 			end
 
 			create ll_handle.make
-			rc := LUSB.libusb_open (l_dev, ll_handle)
+			rc := {LIBUSB_FUNCTIONS}.libusb_open (l_dev, ll_handle)
 			if {LIBUSB_ERROR_ENUM_API}.LIBUSB_SUCCESS = rc   then
 				create handle.make_by_pointer (ll_handle.item)
 			else
@@ -129,7 +129,7 @@ feature -- Callback
 			print ("%NDevice detached");
 
 			if attached handle as l_handle then
-				LUSB.libusb_close (l_handle)
+				{LIBUSB_FUNCTIONS}.libusb_close (l_handle)
 				handle := Void
 			end
 			done := done + 1
@@ -140,11 +140,6 @@ feature {NONE} -- Implementation
 
 	LIBUSB_HOTPLUG_MATCH_ANY: INTEGER = -1
 		-- Wildcard matching for hotplug events.
-
-	LUSB: LIBUSB_FUNCTIONS
-		do
-			create Result
-		end
 
 	handle: detachable LIBUSB_DEVICE_HANDLE_STRUCT_API
 

@@ -229,25 +229,25 @@ feature {ANY} -- Member Access
 			user_data_set: a_value = user_data
 		end
 
-	buffer:  detachable STRING
+	buffer:  detachable C_STRING
 			-- Access member `buffer`
 		require
 			exists: exists
 		do
 			if attached c_buffer (item) as l_ptr then
-				Result := (create {C_STRING}.make_by_pointer (l_ptr)).string
+				create Result.make_by_pointer (l_ptr)
 			end
 		ensure
 			result_void: Result = Void implies c_buffer (item) = default_pointer
-			result_not_void: attached Result as l_result implies l_result.same_string ((create {C_STRING}.make_by_pointer (item)).string)
+			result_not_void: attached Result as l_result implies l_result.string.same_string ((create {C_STRING}.make_by_pointer (item)).string)
 		end
 
-	set_buffer (a_value: STRING) 
+	set_buffer (a_value: C_STRING) 
 			-- Change the value of member `buffer` to `a_value`.
 		require
 			exists: exists
 		do
-			set_c_buffer (item, (create {C_STRING}.make (a_value)).item )
+			set_c_buffer (item, a_value.item )
 		end
 
 	num_iso_packets: INTEGER

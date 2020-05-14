@@ -12,6 +12,8 @@ feature -- Access
 	set_libusb_log_cb_object (a_class: POINTER) 
 		do
 			c_set_libusb_log_cb_object (a_class)
+		ensure
+			instance_free: class
 		end
 
 	release_libusb_log_cb_object
@@ -53,16 +55,22 @@ feature -- Access
 	set_libusb_log_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_log_cb_entry_1 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_log_cb_entry_2 (a_feature: POINTER) 
 		do
 			c_set_libusb_log_cb_entry_2 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_log_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_log_cb_entry_3 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	call_libusb_log_cb (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER; str: STRING) 
@@ -71,11 +79,15 @@ feature -- Access
 		do
 			create str_c_string.make (str)
 			c_call_libusb_log_cb (a_function, ctx.item, level, str_c_string.item)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_added_cb_object (a_class: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_object (a_class)
+		ensure
+			instance_free: class
 		end
 
 	release_libusb_pollfd_added_cb_object
@@ -117,26 +129,36 @@ feature -- Access
 	set_libusb_pollfd_added_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_entry_1 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_added_cb_entry_2 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_entry_2 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_added_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_added_cb_entry_3 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	call_libusb_pollfd_added_cb (a_function: POINTER; fd: INTEGER; events: INTEGER; user_data: POINTER) 
 		do
 			c_call_libusb_pollfd_added_cb (a_function, fd, events, user_data)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_removed_cb_object (a_class: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_object (a_class)
+		ensure
+			instance_free: class
 		end
 
 	release_libusb_pollfd_removed_cb_object
@@ -178,26 +200,36 @@ feature -- Access
 	set_libusb_pollfd_removed_cb_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_entry_1 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_removed_cb_entry_2 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_entry_2 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_pollfd_removed_cb_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_pollfd_removed_cb_entry_3 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	call_libusb_pollfd_removed_cb (a_function: POINTER; fd: INTEGER; user_data: POINTER) 
 		do
 			c_call_libusb_pollfd_removed_cb (a_function, fd, user_data)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_hotplug_callback_fn_object (a_class: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_object (a_class)
+		ensure
+			instance_free: class
 		end
 
 	release_libusb_hotplug_callback_fn_object
@@ -239,26 +271,36 @@ feature -- Access
 	set_libusb_hotplug_callback_fn_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_entry_1 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_hotplug_callback_fn_entry_2 (a_feature: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_entry_2 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_hotplug_callback_fn_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_hotplug_callback_fn_entry_3 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	call_libusb_hotplug_callback_fn (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; device: LIBUSB_DEVICE_STRUCT_API; event: INTEGER; user_data: POINTER): INTEGER 
 		do
 			Result := c_call_libusb_hotplug_callback_fn (a_function, ctx.item, device.item, event, user_data)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_transfer_cb_fn_object (a_class: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_object (a_class)
+		ensure
+			instance_free: class
 		end
 
 	release_libusb_transfer_cb_fn_object
@@ -300,21 +342,29 @@ feature -- Access
 	set_libusb_transfer_cb_fn_entry_1 (a_feature: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_entry_1 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_transfer_cb_fn_entry_2 (a_feature: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_entry_2 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	set_libusb_transfer_cb_fn_entry_3 (a_feature: POINTER) 
 		do
 			c_set_libusb_transfer_cb_fn_entry_3 (a_feature)
+		ensure
+			instance_free: class
 		end
 
 	call_libusb_transfer_cb_fn (a_function: POINTER; transfer: LIBUSB_TRANSFER_STRUCT_API) 
 		do
 			c_call_libusb_transfer_cb_fn (a_function, transfer.item)
+		ensure
+			instance_free: class
 		end
 
 feature -- Externals

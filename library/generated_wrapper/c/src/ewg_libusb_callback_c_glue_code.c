@@ -59,6 +59,7 @@ void libusb_log_cb_stub_3 (libusb_context *ctx, enum libusb_log_level level, cha
 	}
 }
 
+
 void set_libusb_log_cb_entry_1 (void* a_feature){
 	libusb_log_cb_address_1 = (libusb_log_cb_eiffel_feature) a_feature;
 }
@@ -71,6 +72,7 @@ void set_libusb_log_cb_entry_3 (void* a_feature){
 	libusb_log_cb_address_3 = (libusb_log_cb_eiffel_feature) a_feature;
 }
 
+
 void* get_libusb_log_cb_stub_1 (){
 	return (void*) libusb_log_cb_stub_1;
 }
@@ -82,6 +84,7 @@ void* get_libusb_log_cb_stub_2 (){
 void* get_libusb_log_cb_stub_3 (){
 	return (void*) libusb_log_cb_stub_3;
 }
+
 
 void call_libusb_log_cb (void *a_function, libusb_context *ctx, enum libusb_log_level level, char const *str)
 {
@@ -146,6 +149,7 @@ void libusb_pollfd_added_cb_stub_3 (int fd, short events, void *user_data)
 		libusb_pollfd_added_cb_address_3 (eif_access(libusb_pollfd_added_cb_object), fd, events, user_data);
 	}
 }
+
 
 void set_libusb_pollfd_added_cb_entry_1 (void* a_feature){
 	libusb_pollfd_added_cb_address_1 = (libusb_pollfd_added_cb_eiffel_feature) a_feature;

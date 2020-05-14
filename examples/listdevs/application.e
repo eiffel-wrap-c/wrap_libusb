@@ -24,15 +24,15 @@ feature {NONE} -- Initialization
 			list: LIBUSB_DEVICE_LIST
 			i : INTEGER
 		do
-			ret := LUSB.libusb_init (Void)
+			ret := {LIBUSB_FUNCTIONS}.libusb_init (Void)
 			check success: ret = 0 end
 
 			create list
-			ret := LUSB.libusb_get_device_list (Void, list)
+			ret := {LIBUSB_FUNCTIONS}.libusb_get_device_list (Void, list)
 
 			if ret < 0 then
 				print ("Can't get the device list")
-				print (LUSB.libusb_error_name (ret))
+				print ({LIBUSB_FUNCTIONS}.libusb_error_name (ret))
 			else
 				from
 					i := 1
@@ -42,10 +42,10 @@ feature {NONE} -- Initialization
 					print_device (list.at (i))
 					i := i + 1
 				end
-				LUSB.libusb_free_device_list (list, True)
+				{LIBUSB_FUNCTIONS}.libusb_free_device_list (list, True)
 			end
 
-			LUSB.libusb_exit (Void)
+			{LIBUSB_FUNCTIONS}.libusb_exit (Void)
 		end
 
 	print_device (a_device: LIBUSB_DEVICE_STRUCT_API)
@@ -56,15 +56,15 @@ feature {NONE} -- Initialization
 
 		do
 			create desc.make
-			ret := LUSB.libusb_get_device_descriptor (a_device, desc)
+			ret := {LIBUSB_FUNCTIONS}.libusb_get_device_descriptor (a_device, desc)
 			if ret < 0 then
 				print ("%N Failed to get device descriptor")
 			else
-				print ("%N Dev (bus " + LUSB.libusb_get_bus_number (a_device).out + ", device " + LUSB.libusb_get_device_address (a_device).out + " ): " +
+				print ("%N Dev (bus " + {LIBUSB_FUNCTIONS}.libusb_get_bus_number (a_device).out + ", device " + {LIBUSB_FUNCTIONS}.libusb_get_device_address (a_device).out + " ): " +
 				desc.idvendor.to_hex_string + " " + desc.idproduct.to_hex_string)
 
 				create path.make (8)
-				ret := LUSB.libusb_get_port_numbers(a_device, path, path.capacity)
+				ret := {LIBUSB_FUNCTIONS}.libusb_get_port_numbers(a_device, path, path.capacity)
 				if ret > 0 then
 					print(" path: " + path[1].code.out)
 					from j:= 2 until j >= ret
@@ -76,13 +76,6 @@ feature {NONE} -- Initialization
 				print("%N");
 			end
 
-		end
-
-feature {NONE} -- Implementation
-
-	LUSB: LIBUSB_FUNCTIONS
-		once
-			create Result
 		end
 
 end

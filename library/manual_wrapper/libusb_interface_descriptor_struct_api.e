@@ -261,8 +261,6 @@ feature {ANY} -- Member Access
 		do
 			-- TODO check
 			set_c_endpoint (item, a_value.item)
-		ensure
-			endpoint_set: attached endpoint as l_value implies l_value.item = a_value.item
 		end
 
 	extra:  detachable STRING

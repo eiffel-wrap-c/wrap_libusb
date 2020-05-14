@@ -28,15 +28,15 @@ feature {NONE} -- Initialization
 			data: STRING
 			i : INTEGER
 		do
-			ret := LUSB.libusb_init (Void)
+			ret := {LIBUSB_FUNCTIONS}.libusb_init (Void)
 			check success: ret = 0 end
 
 			create list
-			ret := LUSB.libusb_get_device_list (Void, list)
+			ret := {LIBUSB_FUNCTIONS}.libusb_get_device_list (Void, list)
 
 			if ret < 0 then
 				print ("Can't get the device list")
-				print (LUSB.libusb_error_name (ret))
+				print ({LIBUSB_FUNCTIONS}.libusb_error_name (ret))
 			else
 				from
 					i := 1
@@ -46,10 +46,10 @@ feature {NONE} -- Initialization
 					print_device (list.at (i))
 					i := i + 1
 				end
-				LUSB.libusb_free_device_list (list, True)
+				{LIBUSB_FUNCTIONS}.libusb_free_device_list (list, True)
 			end
 
-			LUSB.libusb_exit (Void)
+			{LIBUSB_FUNCTIONS}.libusb_exit (Void)
 		end
 
 	print_device (a_device: LIBUSB_DEVICE_STRUCT_API)
@@ -63,39 +63,39 @@ feature {NONE} -- Initialization
 			config: LIBUSB_CONFIG_DESCRIPTOR_STRUCT_API
 		do
 			create desc.make
-			ret := LUSB.libusb_get_device_descriptor (a_device, desc)
+			ret := {LIBUSB_FUNCTIONS}.libusb_get_device_descriptor (a_device, desc)
 			if ret < 0 then
 				print ("%N Failed to get device descriptor")
 			else
-				print ("%N Dev (bus " + LUSB.libusb_get_bus_number (a_device).out + ", device " + LUSB.libusb_get_device_address (a_device).out + " ): " +
+				print ("%N Dev (bus " + {LIBUSB_FUNCTIONS}.libusb_get_bus_number (a_device).out + ", device " + {LIBUSB_FUNCTIONS}.libusb_get_device_address (a_device).out + " ): " +
 				desc.idvendor.to_hex_string + " " + desc.idproduct.to_hex_string)
 
 				create handle.make
-				ret := LUSB.libusb_open (a_device, handle)
+				ret := {LIBUSB_FUNCTIONS}.libusb_open (a_device, handle)
 				if ret = {LIBUSB_ERROR_ENUM_API}.libusb_success then
 					length := 256
 					create data.make (length)
 					if desc.imanufacturer /= 0 then
-						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.imanufacturer, data, length)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_string_descriptor_ascii (handle, desc.imanufacturer, data, length)
 						if ret > 0 then
 							print ("%N      Manufacturer: " + data )
 						end
 					end
 					if desc.iproduct /= 0 then
-						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.iproduct, data, length)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_string_descriptor_ascii (handle, desc.iproduct, data, length)
 						if ret > 0 then
 							print ("%N      Product: " + data )
 						end
 					end
 					if desc.iserialnumber /= 0 then
-						ret := LUSB.libusb_get_string_descriptor_ascii (handle, desc.iserialnumber, data, length)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_string_descriptor_ascii (handle, desc.iserialnumber, data, length)
 						if ret > 0 then
 							print ("%N      Serial Number: " + data + "%N")
 						end
 					end
 				else
 						-- Print the error
-					print ("%N " + LUSB.libusb_error_name (ret) + "%N")
+					print ("%N " + {LIBUSB_FUNCTIONS}.libusb_error_name (ret) + "%N")
 				end
 			end
 
@@ -105,12 +105,12 @@ feature {NONE} -- Initialization
 				i = desc.bnumconfigurations
 			loop
 				create config.make
-				ret := LUSB.libusb_get_config_descriptor (a_device, i, config)
+				ret := {LIBUSB_FUNCTIONS}.libusb_get_config_descriptor (a_device, i, config)
 				if ret /= {LIBUSB_ERROR_ENUM_API}.libusb_success then
-					print ("%N Couldn't retrieve descriptors" + LUSB.libusb_error_name (ret) + "%N")
+					print ("%N Couldn't retrieve descriptors" + {LIBUSB_FUNCTIONS}.libusb_error_name (ret) + "%N")
 				else
 					print_configuration (config)
-					LUSB.libusb_free_config_descriptor (config)
+					{LIBUSB_FUNCTIONS}.libusb_free_config_descriptor (config)
 				end
 				if attached handle and then desc.bcdusb >= 0x0201 then
 					print_bos(handle)
@@ -118,7 +118,7 @@ feature {NONE} -- Initialization
 				i := i + 1
 			end
 			if attached handle then
-				LUSB.libusb_close (handle)
+				{LIBUSB_FUNCTIONS}.libusb_close (handle)
 			end
 
 		end
@@ -188,14 +188,14 @@ feature {NONE} -- Initialization
 			print("        bSynchAddress:       "+ a_endpoint.bsynchaddress.out + "%N");
 
 			from i := 0 until i = a_endpoint.extra_length loop
-				if attached a_endpoint.extra as l_extra then
+				if attached a_endpoint.extra as extra and then attached extra.string as l_extra then
 					if l_extra [i + 2].code = {LIBUSB_DESCRIPTOR_TYPE_ENUM_API}.LIBUSB_DT_SS_ENDPOINT_COMPANION then
 						create ep_comp.make
-						ret := LUSB.libusb_get_ss_endpoint_companion_descriptor(Void, a_endpoint, ep_comp)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_ss_endpoint_companion_descriptor(Void, a_endpoint, ep_comp)
 
 						if ret = {LIBUSB_ERROR_ENUM_API}.libusb_success then
 							print_endpoint_comp (ep_comp)
-							LUSB.libusb_free_ss_endpoint_companion_descriptor (ep_comp)
+							{LIBUSB_FUNCTIONS}.libusb_free_ss_endpoint_companion_descriptor (ep_comp)
 						end
 					end
 					i := i + l_extra [i].code
@@ -225,7 +225,7 @@ feature {NONE} -- Initialization
 			l_ss_dev_cap: LIBUSB_SS_USB_DEVICE_CAPABILITY_DESCRIPTOR_STRUCT_API
 		do
 			create l_bos.make
-			ret := LUSB.libusb_get_bos_descriptor (a_handle, l_bos)
+			ret := {LIBUSB_FUNCTIONS}.libusb_get_bos_descriptor (a_handle, l_bos)
 			if ret < 0 then
 				-- do nothing
 			else
@@ -237,27 +237,27 @@ feature {NONE} -- Initialization
 					l_dev_cap := l_bos.dev_capability_at (i)
 					if l_dev_cap.bdevcapabilitytype = {LIBUSB_BOS_TYPE_ENUM_API}.LIBUSB_BT_USB_2_0_EXTENSION then
 						create l_usb_2_0_ext.make
-						ret := LUSB.libusb_get_usb_2_0_extension_descriptor(Void, l_dev_cap,  l_usb_2_0_ext)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_usb_2_0_extension_descriptor(Void, l_dev_cap,  l_usb_2_0_ext)
 						if ret < 0 then
-							print ("%N" + LUSB.libusb_error_name (ret))
+							print ("%N" + {LIBUSB_FUNCTIONS}.libusb_error_name (ret))
 							create l_exception
 							l_exception.set_description (generator + "print_bos failed at libusb_get_usb_2_0_extension_descriptor")
 							l_exception.raise
 						else
 							print_2_0_ext_cap (l_usb_2_0_ext)
-							LUSB.libusb_free_usb_2_0_extension_descriptor (l_usb_2_0_ext)
+							{LIBUSB_FUNCTIONS}.libusb_free_usb_2_0_extension_descriptor (l_usb_2_0_ext)
 						end
 					elseif l_dev_cap.bdevcapabilitytype = {LIBUSB_BOS_TYPE_ENUM_API}.LIBUSB_BT_SS_USB_DEVICE_CAPABILITY then
 						create l_ss_dev_cap.make
-						ret := LUSB.libusb_get_ss_usb_device_capability_descriptor(Void, l_dev_cap, l_ss_dev_cap)
+						ret := {LIBUSB_FUNCTIONS}.libusb_get_ss_usb_device_capability_descriptor(Void, l_dev_cap, l_ss_dev_cap)
 						if ret < 0 then
-							print ("%N" + LUSB.libusb_error_name (ret))
+							print ("%N" + {LIBUSB_FUNCTIONS}.libusb_error_name (ret))
 							create l_exception
 							l_exception.set_description (generator + "print_bos failed at libusb_get_ss_usb_device_capability_descriptor")
 							l_exception.raise
 						else
 							print_ss_usb_cap (l_ss_dev_cap)
-							LUSB.libusb_free_ss_usb_device_capability_descriptor (l_ss_dev_cap)
+							{LIBUSB_FUNCTIONS}.libusb_free_ss_usb_device_capability_descriptor (l_ss_dev_cap)
 						end
 					end
 					i := i +  1
@@ -283,11 +283,6 @@ feature {NONE} -- Initialization
 			print("      bU2devExitLat:         " + a_ss_usb_cap.bu2devexitlat.out + "%N")
 		end
 
-feature {NONE} -- Implementation
 
-	LUSB: LIBUSB_FUNCTIONS
-		once
-			create Result
-		end
 
 end
