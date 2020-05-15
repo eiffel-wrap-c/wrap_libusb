@@ -42,9 +42,9 @@ feature {NONE} -- Initialization
                 print (l_val + "%N")
             end
 
-
-            vendor_id  := 0x0951
-			product_id := 0x1607
+				-- Set defaults vendor-id product-id, for testing.
+            vendor_id  := 0x1058 --0x0951
+			product_id := 0x0704 --0x1607
 			class_id   := LIBUSB_HOTPLUG_MATCH_ANY
 
 
