@@ -23,9 +23,6 @@ feature {NONE} -- Initialization
 		local
 			ret: INTEGER
 			list: LIBUSB_DEVICE_LIST
-			desc: LIBUSB_DEVICE_DESCRIPTOR_STRUCT_API
-			handle: LIBUSB_DEVICE_HANDLE_STRUCT_API
-			data: STRING
 			i : INTEGER
 		do
 			ret := {LIBUSB_FUNCTIONS}.libusb_init (Void)
