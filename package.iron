@@ -1,0 +1,20 @@
+package wrap_libusb
+
+project
+	wrap_libusb = "library/libusb.ecf"
+
+note
+	title: Eiffel wrap_libusb
+	description: "[
+	wrap_libusb is an Eiffel binding of libusb C API using WrapC tool.
+	
+	libusb is a C library that provides generic access to USB devices. It is intended to be used by developers to facilitate the production of applications that communicate with USB hardware.
+	It is portable: Using a single cross-platform API, it provides access to USB devices on Linux, macOS, Windows, etc.				]"
+
+	tags: libusb, usb, library , wrapc 
+	license: EFL
+	copyright: Copyright (c)  2020 Javier Velilla, Eiffel Software and others.
+	link[license]: "license" "https://github.com/eiffel-wrap-c/wrap_libusb/blob/master/license.lic"
+	link[github]: "project" https://github.com/eiffel-wrap-c/wrap_libusb
+
+end
