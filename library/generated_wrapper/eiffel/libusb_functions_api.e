@@ -238,7 +238,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING; port_numbers_len: INTEGER): INTEGER 
+	libusb_get_port_numbers (dev: LIBUSB_DEVICE_STRUCT_API; port_numbers: STRING_8; port_numbers_len: INTEGER): INTEGER 
 		local
 			port_numbers_c_string: C_STRING
 		do
@@ -248,7 +248,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_get_port_path (ctx: LIBUSB_CONTEXT_STRUCT_API; dev: LIBUSB_DEVICE_STRUCT_API; path: STRING; path_length: INTEGER): INTEGER 
+	libusb_get_port_path (ctx: LIBUSB_CONTEXT_STRUCT_API; dev: LIBUSB_DEVICE_STRUCT_API; path: STRING_8; path_length: INTEGER): INTEGER 
 		local
 			path_c_string: C_STRING
 		do
@@ -379,7 +379,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_alloc_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; num_streams: INTEGER; endpoints: STRING; num_endpoints: INTEGER): INTEGER 
+	libusb_alloc_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; num_streams: INTEGER; endpoints: STRING_8; num_endpoints: INTEGER): INTEGER 
 		local
 			endpoints_c_string: C_STRING
 		do
@@ -389,7 +389,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_free_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoints: STRING; num_endpoints: INTEGER): INTEGER 
+	libusb_free_streams (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoints: STRING_8; num_endpoints: INTEGER): INTEGER 
 		local
 			endpoints_c_string: C_STRING
 		do
@@ -406,7 +406,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_dev_mem_free (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; buffer: STRING; length: INTEGER): INTEGER 
+	libusb_dev_mem_free (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; buffer: STRING_8; length: INTEGER): INTEGER 
 		local
 			buffer_c_string: C_STRING
 		do
@@ -488,7 +488,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_control_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; request_type: INTEGER; brequest: INTEGER; wvalue: INTEGER; windex: INTEGER; data: STRING; wlength: INTEGER; timeout: INTEGER): INTEGER 
+	libusb_control_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; request_type: INTEGER; brequest: INTEGER; wvalue: INTEGER; windex: INTEGER; data: STRING_8; wlength: INTEGER; timeout: INTEGER): INTEGER 
 		local
 			data_c_string: C_STRING
 		do
@@ -498,7 +498,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_bulk_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
+	libusb_bulk_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING_8; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
 		local
 			data_c_string: C_STRING
 		do
@@ -508,7 +508,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_interrupt_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
+	libusb_interrupt_transfer (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; endpoint: INTEGER; data: STRING_8; length: INTEGER; actual_length: POINTER; timeout: INTEGER): INTEGER 
 		local
 			data_c_string: C_STRING
 		do
@@ -518,7 +518,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING; length: INTEGER): INTEGER 
+	libusb_get_string_descriptor_ascii (dev_handle: LIBUSB_DEVICE_HANDLE_STRUCT_API; desc_index: INTEGER; data: STRING_8; length: INTEGER): INTEGER 
 		local
 			data_c_string: C_STRING
 		do

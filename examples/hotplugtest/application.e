@@ -1,6 +1,8 @@
 note
 	description: "[
 				Eiffel version of C libusb example program for hotplug API.
+				Warning: Not supported on windows.
+				https://github.com/libusb/libusb/pull/617
 	]"
 	date: "$Date$"
 	revision: "$Revision$"

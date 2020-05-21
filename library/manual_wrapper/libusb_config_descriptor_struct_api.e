@@ -242,8 +242,8 @@ feature {ANY} -- Member Access
 		do
 			-- TODO check
 			set_c_interface (item, a_value.item)
-		ensure
-			interface_set: attached interface as l_value implies l_value.item = a_value.item
+--		ensure
+--			interface_set: attached interface as l_value implies l_value.item = a_value.item
 		end
 
 	extra:  detachable STRING

@@ -40,6 +40,9 @@ Using vcpkg (https://github.com/microsoft/vcpkg) tool, you can install libusb li
 ```
 
 Copy the library `libusb-1.0.lib` to `library\C\lib`
+If you are using Windows, it's recommended first read the libusb wiki
+https://github.com/libusb/libusb/wiki/Windows.
+
 		
 To learn more check the libusb wiki pages 
 

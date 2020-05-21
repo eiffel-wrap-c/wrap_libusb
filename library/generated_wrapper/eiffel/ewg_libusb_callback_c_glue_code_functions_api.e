@@ -73,7 +73,7 @@ feature -- Access
 			instance_free: class
 		end
 
-	call_libusb_log_cb (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER; str: STRING) 
+	call_libusb_log_cb (a_function: POINTER; ctx: LIBUSB_CONTEXT_STRUCT_API; level: INTEGER; str: STRING_8) 
 		local
 			str_c_string: C_STRING
 		do
